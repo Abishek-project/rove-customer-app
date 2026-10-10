@@ -47,16 +47,16 @@ class _CitySheetState extends State<_CitySheet> {
   String? _message;
 
   Future<void> _selectCountry(Country country) async {
-    await context.read<PreferencesCubit>().setCountry(country.code);
-    if (!mounted) return;
-    context.read<TripCubit>().setCountry(country.code);
+    // The preferences listener in RoveApp moves the trip to the new city.
+    await context.read<PreferencesCubit>().setCountry(
+      country.code,
+      cityId: country.cities.firstOrNull?.id,
+    );
   }
 
   Future<void> _selectCity(City city) async {
     await context.read<PreferencesCubit>().setCity(city.id);
-    if (!mounted) return;
-    context.read<TripCubit>().setCity(city);
-    Navigator.of(context).pop();
+    if (mounted) Navigator.of(context).pop();
   }
 
   Future<void> _useLocation(Country country) async {

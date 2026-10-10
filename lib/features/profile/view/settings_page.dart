@@ -12,7 +12,6 @@ import '../../../shared/models/reference.dart';
 import '../../../shared/repositories/profile_repository.dart';
 import '../../authentication/bloc/auth_bloc.dart';
 import '../../onboarding/bloc/countries_cubit.dart';
-import '../../search/bloc/trip_cubit.dart';
 import '../bloc/profile_form_cubit.dart';
 
 /// Languages the app is structured for. Only English ships today; Arabic
@@ -46,23 +45,22 @@ class _SettingsView extends StatelessWidget {
     }
   }
 
+  /// Saves the country with its first city as the default. The app-level
+  /// preferences listener moves the trip (city, time zone) accordingly.
   Future<void> _setCountry(BuildContext context, Country country) async {
     final prefs = context.read<PreferencesCubit>();
-    final trip = context.read<TripCubit>();
+    final city = country.cities.firstOrNull;
     await _save(
       context,
-      ProfileUpdate(countryCode: country.code, cityId: null),
+      ProfileUpdate(countryCode: country.code, cityId: city?.id),
     );
-    await prefs.setCountry(country.code);
-    trip.setCountry(country.code);
+    await prefs.setCountry(country.code, cityId: city?.id);
   }
 
   Future<void> _setCity(BuildContext context, City city) async {
     final prefs = context.read<PreferencesCubit>();
-    final trip = context.read<TripCubit>();
     await _save(context, ProfileUpdate(cityId: city.id));
     await prefs.setCity(city.id);
-    trip.setCity(city);
   }
 
   @override
