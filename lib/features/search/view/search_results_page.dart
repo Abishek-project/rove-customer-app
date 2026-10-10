@@ -115,15 +115,13 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                 padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
                 child: Row(
                   children: [
-                    Flexible(
-                      child: _ControlPill(
-                        key: const Key('search-sort'),
-                        icon: Icons.swap_vert_rounded,
-                        label: l10n.sort(query?.sort ?? VehicleSort.relevance),
-                        onTap: query == null
-                            ? null
-                            : () => _chooseSort(query.sort),
-                      ),
+                    _ControlPill(
+                      key: const Key('search-sort'),
+                      icon: Icons.swap_vert_rounded,
+                      label: l10n.sort(query?.sort ?? VehicleSort.relevance),
+                      onTap: query == null
+                          ? null
+                          : () => _chooseSort(query.sort),
                     ),
                     const SizedBox(width: RoveSpacing.xs),
                     _ControlPill(
@@ -137,12 +135,17 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                           ? null
                           : () => context.push(Routes.filters),
                     ),
-                    const Spacer(),
-                    Text(
-                      state.status == LoadStatus.success
-                          ? l10n.searchResultsCount(state.meta.total)
-                          : '',
-                      style: text.bodySmall,
+                    const SizedBox(width: RoveSpacing.xs),
+                    Expanded(
+                      child: Text(
+                        state.status == LoadStatus.success
+                            ? l10n.searchResultsCount(state.meta.total)
+                            : '',
+                        style: text.bodySmall,
+                        textAlign: TextAlign.end,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ],
                 ),
