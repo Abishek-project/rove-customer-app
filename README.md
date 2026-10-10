@@ -20,7 +20,8 @@ flutter run --dart-define-from-file=dart_defines/mock.json      # mock mode, no 
 ```
 
 Mock mode runs against an in-memory backend that returns the exact JSON shapes from
-`shared/CONTRACTS.md` (pricing, availability, state machine and cancellation rules included).
+`shared/CONTRACTS.md` (pricing, availability, state machine and cancellation rules included), with
+the same premium fleet as the backend seed and bundled photos, so it works fully offline.
 Sign in with **Continue with Google** (simulated new user → profile completion) or the dev email form
 with `customer@rove.test` / `customer.in@rove.test` (any password).
 
@@ -146,5 +147,12 @@ Codegen after model changes: `dart run build_runner build`. Strings: edit `tool/
 
 ## Credits
 
-Plus Jakarta Sans — © The Plus Jakarta Sans Project Authors, SIL Open Font License 1.1
-(`assets/fonts/OFL.txt`).
+* **Photos** — from [Unsplash](https://unsplash.com) under the free Unsplash License. Welcome and
+  onboarding: Jahanzeb Ahsan (night road), Jakob Rosen, Sunder Muthukumaran and Leiada Krozjhen
+  (cars). Mock-mode car photos are the same files as the backend seed. Every file, photo URL and
+  photographer is listed in [`assets/CREDITS.md`](assets/CREDITS.md).
+* **Plus Jakarta Sans** — © The Plus Jakarta Sans Project Authors, SIL Open Font License 1.1
+  (`assets/fonts/OFL.txt`).
+
+Refresh the bundled images after the shared assets or the backend seed change:
+`python3 tool/sync_design_assets.py`.

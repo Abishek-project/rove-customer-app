@@ -38,6 +38,15 @@ class VehiclePhoto extends StatelessWidget {
     );
     final image = (url == null || url!.isEmpty)
         ? fallback
+        : url!.startsWith('asset:')
+        // Bundled photos (mock mode).
+        ? Image.asset(
+            url!.substring('asset:'.length),
+            fit: BoxFit.cover,
+            cacheWidth: memCacheWidth,
+            semanticLabel: semanticLabel,
+            errorBuilder: (_, _, _) => fallback,
+          )
         : CachedNetworkImage(
             imageUrl: url!,
             fit: BoxFit.cover,

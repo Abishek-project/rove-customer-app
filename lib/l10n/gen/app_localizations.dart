@@ -436,6 +436,12 @@ abstract class AppLocalizations {
   /// **'Log in'**
   String get logIn;
 
+  /// No description provided for @signUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign up'**
+  String get signUp;
+
   /// No description provided for @skip.
   ///
   /// In en, this message translates to:

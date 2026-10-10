@@ -212,11 +212,11 @@ void main() {
         body: VehicleCard(vehicle: v, onTap: () {}),
       ),
     );
-    expect(find.text('Toyota Corolla 2024'), findsOneWidget);
-    for (final spec in ['Automatic', '5 seats', 'Petrol']) {
+    expect(find.text('MINI John Cooper Works 2023'), findsOneWidget);
+    for (final spec in ['Automatic', '4 seats', 'Petrol']) {
       expect(find.textContaining(spec, findRichText: true), findsOneWidget);
     }
-    expect(find.text('AED 150/day'), findsOneWidget);
+    expect(find.text('AED 280/day'), findsOneWidget);
     expect(find.textContaining('total · 3 days'), findsOneWidget);
   });
 }

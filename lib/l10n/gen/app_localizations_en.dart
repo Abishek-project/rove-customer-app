@@ -193,6 +193,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logIn => 'Log in';
 
   @override
+  String get signUp => 'Sign up';
+
+  @override
   String get skip => 'Skip';
 
   @override

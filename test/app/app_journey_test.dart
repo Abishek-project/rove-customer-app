@@ -90,7 +90,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // Details → checkout.
-    expect(find.text('Nissan Patrol'), findsWidgets);
+    expect(find.text('Mercedes-AMG G 63'), findsWidgets);
     expect(find.text('Refundable deposit'), findsOneWidget);
     await tester.tap(find.byKey(const Key('details-book')));
     await tester.pumpAndSettle();

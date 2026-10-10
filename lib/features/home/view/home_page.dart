@@ -117,12 +117,26 @@ class _HomeViewState extends State<_HomeView> {
                 ),
                 Padding(
                   padding: RoveSpacing.page,
-                  child: SectionHeader(title: l10n.categoriesTitle),
+                  child: SectionHeader(
+                    title: l10n.categoriesTitle,
+                    actionLabel: l10n.categoryAll,
+                    onAction: () => startSearch(
+                      context,
+                      category: context.read<HomeCubit>().state.category,
+                    ),
+                  ),
                 ),
                 const _Categories(),
                 Padding(
                   padding: RoveSpacing.page,
-                  child: SectionHeader(title: l10n.featuredTitle),
+                  child: BlocSelector<HomeCubit, HomeState, VehicleCategory?>(
+                    selector: (s) => s.category,
+                    builder: (context, category) => SectionHeader(
+                      title: category == null
+                          ? l10n.featuredTitle
+                          : l10n.category(category),
+                    ),
+                  ),
                 ),
                 const _Featured(),
                 const _RecentlyViewed(),
@@ -322,39 +336,55 @@ class _Categories extends StatelessWidget {
         separatorBuilder: (_, _) => const SizedBox(width: RoveSpacing.sm),
         itemBuilder: (context, i) {
           final category = VehicleCategoryWire.browsable[i];
-          return Semantics(
-            button: true,
-            label: l10n.category(category),
-            excludeSemantics: true,
-            child: Material(
-              key: ValueKey('category-${category.wire}'),
-              color: c.surface,
-              borderRadius: RoveRadius.cardAll,
-              child: InkWell(
-                borderRadius: RoveRadius.cardAll,
-                onTap: () => startSearch(context, category: category),
-                child: SizedBox(
-                  width: 88,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircleAvatar(
-                        radius: 20,
-                        backgroundColor: c.inputFill,
-                        child: Icon(
-                          _icons[category],
-                          size: 20,
-                          color: c.textPrimary,
-                        ),
+          return BlocSelector<HomeCubit, HomeState, bool>(
+            selector: (s) => s.category == category,
+            builder: (context, selected) => Semantics(
+              button: true,
+              selected: selected,
+              label: l10n.category(category),
+              excludeSemantics: true,
+              child: AnimatedContainer(
+                duration: RoveMotion.fast,
+                decoration: BoxDecoration(
+                  color: selected ? c.primary : c.surface,
+                  borderRadius: RoveRadius.cardAll,
+                ),
+                child: Material(
+                  key: ValueKey('category-${category.wire}'),
+                  type: MaterialType.transparency,
+                  child: InkWell(
+                    borderRadius: RoveRadius.cardAll,
+                    onTap: () =>
+                        context.read<HomeCubit>().toggleCategory(category),
+                    child: SizedBox(
+                      width: 88,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircleAvatar(
+                            radius: 20,
+                            backgroundColor: selected
+                                ? Colors.white
+                                : c.inputFill,
+                            child: Icon(
+                              _icons[category],
+                              size: 20,
+                              color: selected ? c.primary : c.textPrimary,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            l10n.category(category),
+                            style: Theme.of(context).textTheme.labelSmall
+                                ?.copyWith(
+                                  color: selected ? c.onPrimary : null,
+                                ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        l10n.category(category),
-                        style: Theme.of(context).textTheme.labelSmall,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),

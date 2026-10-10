@@ -21,9 +21,18 @@ class WelcomePage extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          const HeroImage(
-            RoveAssets.welcomeHero,
-            fallbackIcon: Icons.route_outlined,
+          // Desaturated, darkened night road (reference look).
+          const ColorFiltered(
+            colorFilter: ColorFilter.matrix(<double>[
+              0.2126, 0.7152, 0.0722, 0, -24, //
+              0.2126, 0.7152, 0.0722, 0, -24, //
+              0.2126, 0.7152, 0.0722, 0, -24, //
+              0, 0, 0, 1, 0, //
+            ]),
+            child: HeroImage(
+              RoveAssets.welcomeHero,
+              fallbackIcon: Icons.route_outlined,
+            ),
           ),
           // A dark scrim only behind the text and buttons, for contrast.
           DecoratedBox(
@@ -66,7 +75,7 @@ class WelcomePage extends StatelessWidget {
                   const SizedBox(height: RoveSpacing.xl),
                   RoveButton(
                     key: const Key('welcome-get-started'),
-                    label: l10n.welcomeGetStarted,
+                    label: l10n.signUp,
                     expand: true,
                     onPressed: () => context.push(Routes.onboarding),
                   ),

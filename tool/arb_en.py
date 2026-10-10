@@ -74,6 +74,7 @@ s('welcomeBody', 'Compare verified rental companies in India and the UAE. The fu
 s('welcomeGetStarted', 'Get started')
 s('welcomeTagline', 'Premium car rental, simply.')
 s('logIn', 'Log in')
+s('signUp', 'Sign up')
 s('skip', 'Skip')
 s('next', 'Next')
 s('onboarding1Title', 'Premium car rental in Dubai & Mumbai')
