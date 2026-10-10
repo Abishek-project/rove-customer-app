@@ -2260,8 +2260,8 @@ as String?,
 /// @nodoc
 mixin _$Booking {
 
- String get id; String get reference;@JsonKey(unknownEnumValue: BookingStatus.unknown) BookingStatus get status;@JsonKey(unknownEnumValue: PaymentStatus.unknown) PaymentStatus get paymentStatus; DateTime get pickupAt; DateTime get returnAt; Money get total; BookingVehicleRef get vehicle; BookingPartnerRef get partner; CityRef get city; String get timezone; int get days;@JsonKey(unknownEnumValue: BookingMode.unknown) BookingMode get bookingMode;@JsonKey(unknownEnumValue: DepositStatus.unknown) DepositStatus get depositStatus; DeliveryInfo get delivery; PickupLocation? get pickupLocation; List<LineItem> get lineItems; Money get deposit; List<ConditionalCharge> get conditionalCharges; PolicyInfo? get cancellationPolicy; Money? get cancellationFee; Money? get refund; DateTime? get holdExpiresAt; DateTime? get partnerResponseDueAt; DriverInfo? get driver; String? get pickupInstructions; String? get returnInstructions; List<String> get requiredDocuments; ConditionReportSummary? get pickupReport; ConditionReportSummary? get returnReport; List<BookingEvent> get events; List<String> get allowedActions; DateTime? get createdAt;// CONTRACT-ASSUMPTION: an optional open payment intent on held bookings
-// so "pay" can resume from booking details (contract-requests.md).
+ String get id; String get reference;@JsonKey(unknownEnumValue: BookingStatus.unknown) BookingStatus get status;@JsonKey(unknownEnumValue: PaymentStatus.unknown) PaymentStatus get paymentStatus; DateTime get pickupAt; DateTime get returnAt; Money get total; BookingVehicleRef get vehicle; BookingPartnerRef get partner; CityRef get city; String get timezone; int get days;@JsonKey(unknownEnumValue: BookingMode.unknown) BookingMode get bookingMode;@JsonKey(unknownEnumValue: DepositStatus.unknown) DepositStatus get depositStatus; DeliveryInfo get delivery; PickupLocation? get pickupLocation; List<LineItem> get lineItems; Money get deposit; List<ConditionalCharge> get conditionalCharges; PolicyInfo? get cancellationPolicy; Money? get cancellationFee; Money? get refund; DateTime? get holdExpiresAt; DateTime? get partnerResponseDueAt; DriverInfo? get driver; String? get pickupInstructions; String? get returnInstructions; List<String> get requiredDocuments; ConditionReportSummary? get pickupReport; ConditionReportSummary? get returnReport; List<BookingEvent> get events; List<String> get allowedActions; DateTime? get createdAt;// CONTRACTS v1.3: the open payment intent while allowedActions
+// contains "pay" (status held), so payment can resume from details.
  PaymentIntent? get payment;
 /// Create a copy of Booking
 /// with the given fields replaced by the non-null parameter values.
@@ -2663,8 +2663,8 @@ class _Booking extends Booking {
 }
 
 @override final  DateTime? createdAt;
-// CONTRACT-ASSUMPTION: an optional open payment intent on held bookings
-// so "pay" can resume from booking details (contract-requests.md).
+// CONTRACTS v1.3: the open payment intent while allowedActions
+// contains "pay" (status held), so payment can resume from details.
 @override final  PaymentIntent? payment;
 
 /// Create a copy of Booking
