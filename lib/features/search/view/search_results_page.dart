@@ -115,13 +115,18 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                 padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
                 child: Row(
                   children: [
-                    _ControlPill(
-                      key: const Key('search-sort'),
-                      icon: Icons.swap_vert_rounded,
-                      label: l10n.sort(query?.sort ?? VehicleSort.relevance),
-                      onTap: query == null
-                          ? null
-                          : () => _chooseSort(query.sort),
+                    // Loose flex: full width when it fits, shrinks (with an
+                    // ellipsis) only when space runs out, e.g. large text.
+                    Flexible(
+                      flex: 3,
+                      child: _ControlPill(
+                        key: const Key('search-sort'),
+                        icon: Icons.swap_vert_rounded,
+                        label: l10n.sort(query?.sort ?? VehicleSort.relevance),
+                        onTap: query == null
+                            ? null
+                            : () => _chooseSort(query.sort),
+                      ),
                     ),
                     const SizedBox(width: RoveSpacing.xs),
                     _ControlPill(
