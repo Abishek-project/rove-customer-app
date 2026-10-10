@@ -1,16 +1,18 @@
 # Rove — customer app (Flutter)
 
+> Part of **Rove**: [backend (NestJS)](https://github.com/Abishek-project/rove-backend) · [partner dashboard (React)](https://github.com/Abishek-project/rove-partner-dashboard) · [customer app (Flutter)](https://github.com/Abishek-project/rove-customer-app)
+
 Customer mobile app for **Rove**, a car rental marketplace for India (INR) and the UAE (AED).
 Customers browse cars from verified rental companies, see the backend-calculated price, book,
 pay (mock provider for now) and manage their trips.
 
-* Flutter 3.44 / Dart 3.12 · Material 3 with the Rove design system v2 (`shared/DESIGN.md`):
+* Flutter 3.44 / Dart 3.12 · Material 3 with the Rove design system v2 ([`docs/DESIGN.md`](docs/DESIGN.md)):
   dark by default, sky-blue accent, Plus Jakarta Sans (bundled, OFL), System/Dark/Light toggle.
 * State: **flutter_bloc** only (Blocs for event-driven flows, Cubits for simple state).
 * Navigation: **GoRouter** with auth redirects and a 4-tab shell (Explore, Bookings, Saved, Profile).
 * Networking: **Dio** + typed repositories; models with **freezed** / **json_serializable**.
 * Auth: **Supabase Auth** (Google OAuth; email/password only in local dev). Business data only via the
-  NestJS API (`shared/CONTRACTS.md`).
+  NestJS API ([`CONTRACTS.md`](https://github.com/Abishek-project/rove-backend/blob/main/docs/CONTRACTS.md)).
 
 ## Quick start
 
@@ -20,7 +22,7 @@ flutter run --dart-define-from-file=dart_defines/mock.json      # mock mode, no 
 ```
 
 Mock mode runs against an in-memory backend that returns the exact JSON shapes from
-`shared/CONTRACTS.md` (pricing, availability, state machine and cancellation rules included), with
+[`CONTRACTS.md`](https://github.com/Abishek-project/rove-backend/blob/main/docs/CONTRACTS.md) (pricing, availability, state machine and cancellation rules included), with
 the same premium fleet as the backend seed and bundled photos, so it works fully offline.
 Sign in with **Continue with Google** (simulated new user → profile completion) or the dev email form
 with `customer@rove.test` / `customer.in@rove.test` (any password).
