@@ -140,6 +140,28 @@ class _SettingsView extends StatelessWidget {
                       if (city != null) _setCity(context, city);
                     },
             ),
+          SectionHeader(title: l10n.appearance),
+          SegmentedButton<ThemeMode>(
+            key: const Key('settings-appearance'),
+            showSelectedIcon: false,
+            segments: [
+              ButtonSegment(
+                value: ThemeMode.system,
+                label: Text(l10n.appearanceSystem),
+              ),
+              ButtonSegment(
+                value: ThemeMode.dark,
+                label: Text(l10n.appearanceDark),
+              ),
+              ButtonSegment(
+                value: ThemeMode.light,
+                label: Text(l10n.appearanceLight),
+              ),
+            ],
+            selected: {context.watch<PreferencesCubit>().state.themeMode},
+            onSelectionChanged: (s) =>
+                context.read<PreferencesCubit>().setThemeMode(s.first),
+          ),
           SectionHeader(title: l10n.settingsLanguage),
           RadioGroup<String>(
             groupValue: context.watch<PreferencesCubit>().state.languageCode,

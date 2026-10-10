@@ -62,6 +62,27 @@
   "welcomeTitle": "Rent a car you can trust",
   "welcomeBody": "Compare verified rental companies in India and the UAE. The full price is shown before you book.",
   "welcomeGetStarted": "Get started",
+  "welcomeTagline": "Premium car rental, simply.",
+  "logIn": "Log in",
+  "skip": "Skip",
+  "next": "Next",
+  "onboarding1Title": "Premium car rental in Dubai & Mumbai",
+  "onboarding1Body": "Compare cars from verified rental companies in the UAE and India.",
+  "onboarding2Title": "The full price, before you book",
+  "onboarding2Body": "Taxes and fees included. Refundable deposits shown separately.",
+  "onboarding3Title": "Book in minutes",
+  "onboarding3Body": "Upload your licence once, pay securely and track every booking.",
+  "onboardingPage": "Page {index} of {count}",
+  "@onboardingPage": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "countryTitle": "Where are you renting?",
   "countryBody": "Prices, taxes and payment options follow this country. You can change it later.",
   "countryLoadError": "We couldn't load countries.",
@@ -95,6 +116,10 @@
   "countryLabel": "Country",
   "cityLabel": "City",
   "homeTitle": "Find a car",
+  "searchPlaceholder": "Search cars",
+  "planTripTitle": "Plan your trip",
+  "notificationsTooltip": "Notifications",
+  "categoryAll": "See all",
   "homeGreeting": "Hi {name}",
   "@homeGreeting": {
     "placeholders": {
@@ -256,6 +281,34 @@
   "pickTime": "Time",
   "detailsSpecs": "Details",
   "detailsFeatures": "Features",
+  "back": "Back",
+  "carDetailsTitle": "Car details",
+  "readMore": "Read more",
+  "readLess": "Show less",
+  "bookNow": "Book now",
+  "fromPerDay": "from {price}",
+  "@fromPerDay": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "openInMaps": "Open in Maps",
+  "policiesTitle": "Policies",
+  "specMileage": "Mileage",
+  "specDeposit": "Deposit",
+  "specTransmissionShort": "Transmission",
+  "mileageUnlimitedShort": "Unlimited",
+  "mileagePerDayShort": "{km} km/day",
+  "@mileagePerDayShort": {
+    "placeholders": {
+      "km": {
+        "type": "int"
+      }
+    }
+  },
+  "locationTitle": "Location",
   "dailyRate": "Daily rate",
   "specDoors": "Doors",
   "specLuggage": "Luggage",
@@ -715,6 +768,27 @@
   "browseCars": "Browse cars",
   "savedRemoved": "Removed from saved",
   "profileTitle": "Profile",
+  "showProfile": "Show profile",
+  "settingsGroup": "Settings",
+  "personalInformation": "Personal information",
+  "paymentMethods": "Payment methods",
+  "paymentMethodsBody": "You choose how to pay at checkout. Rove never stores your card details.",
+  "paymentMethodsAvailable": "Available in {country}",
+  "@paymentMethodsAvailable": {
+    "placeholders": {
+      "country": {
+        "type": "String"
+      }
+    }
+  },
+  "countryAndCity": "Country and city",
+  "appearance": "Appearance",
+  "appearanceSystem": "System",
+  "appearanceDark": "Dark",
+  "appearanceLight": "Light",
+  "partnersGroup": "Partners",
+  "listYourFleet": "List your fleet on Rove",
+  "supportGroup": "Support",
   "profileEdit": "Edit profile",
   "profileVerification": "Licence and ID",
   "profileBookingHistory": "Booking history",

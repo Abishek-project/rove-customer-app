@@ -3,6 +3,7 @@ abstract final class Routes {
   static const splash = '/splash';
   static const welcome = '/welcome';
   static const country = '/country';
+  static const onboarding = '/onboarding';
   static const signIn = '/sign-in';
   static const authCallback = '/auth/callback';
   static const completeProfile = '/complete-profile';
@@ -11,6 +12,7 @@ abstract final class Routes {
   static const search = '/explore/search';
   static const filters = '/explore/search/filters';
   static const dates = '/explore/dates';
+  static const plan = '/explore/plan';
 
   static String vehicle(String id) => '/vehicles/$id';
   static String checkout(String vehicleId) => '/vehicles/$vehicleId/checkout';
@@ -29,6 +31,7 @@ abstract final class Routes {
   static const profile = '/profile';
   static const profileEdit = '/profile/edit';
   static const settings = '/profile/settings';
+  static const paymentMethods = '/profile/payment-methods';
   static const verification = '/profile/verification';
   static const support = '/profile/support';
   static const supportNew = '/profile/support/new';
@@ -39,6 +42,7 @@ abstract final class Routes {
   static const publicPaths = {
     splash,
     welcome,
+    onboarding,
     country,
     signIn,
     authCallback,
@@ -50,6 +54,7 @@ abstract final class Routes {
   static const onboardingPaths = {
     splash,
     welcome,
+    onboarding,
     country,
     signIn,
     authCallback,

@@ -43,9 +43,14 @@ void main() {
     await tester.pumpWidget(RoveApp(deps: deps));
     await tester.pumpAndSettle();
 
-    // Welcome → country.
-    expect(find.text('Rent a car you can trust'), findsOneWidget);
-    await tester.tap(find.text('Get started'));
+    // Welcome → onboarding → country.
+    expect(find.text('Premium car rental, simply.'), findsOneWidget);
+    await tester.tap(find.byKey(const Key('welcome-get-started')));
+    await tester.pumpAndSettle();
+    expect(find.text('Premium car rental in Dubai & Mumbai'), findsOneWidget);
+    await tester.tap(find.byKey(const Key('onboarding-next')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('onboarding-skip')));
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey('country-AE')));
     await tester.pumpAndSettle();
@@ -66,6 +71,9 @@ void main() {
     // Home.
     expect(find.text('Hi Aisha'), findsOneWidget);
     expect(find.text('Dubai'), findsOneWidget);
+    await tester.tap(find.byKey(const Key('home-search-pill')));
+    await tester.pumpAndSettle();
+    expect(find.text('Plan your trip'), findsOneWidget);
     await tester.tap(find.byKey(const Key('home-search')));
     await tester.pumpAndSettle();
 

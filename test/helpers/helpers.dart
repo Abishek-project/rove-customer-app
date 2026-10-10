@@ -99,7 +99,7 @@ Future<void> pumpLocalized(
 }) async {
   usePhoneSurface(tester);
   Widget app = MaterialApp(
-    theme: RoveTheme.light(),
+    theme: RoveTheme.dark(),
     localizationsDelegates: localizationDelegates,
     supportedLocales: AppLocalizations.supportedLocales,
     home: child,
@@ -136,7 +136,7 @@ Future<void> pumpRouted(
 }) async {
   usePhoneSurface(tester);
   Widget app = MaterialApp.router(
-    theme: RoveTheme.light(),
+    theme: RoveTheme.dark(),
     localizationsDelegates: localizationDelegates,
     supportedLocales: AppLocalizations.supportedLocales,
     routerConfig: GoRouter(

@@ -238,7 +238,7 @@ class LegalPage extends StatelessWidget {
             privacy ? l10n.privacyBody : l10n.termsBody,
             style: Theme.of(
               context,
-            ).textTheme.bodyLarge?.copyWith(color: RoveColors.textPrimary),
+            ).textTheme.bodyLarge?.copyWith(color: context.colors.textPrimary),
           ),
         ],
       ),

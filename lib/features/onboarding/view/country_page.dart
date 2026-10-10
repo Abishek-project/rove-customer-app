@@ -86,14 +86,14 @@ class _CountryPageState extends State<CountryPage> {
                           final selected = country.code == _selected;
                           return Material(
                             color: selected
-                                ? RoveColors.primaryTint
-                                : RoveColors.surface,
+                                ? context.colors.primaryTint
+                                : context.colors.surface,
                             shape: RoundedRectangleBorder(
                               borderRadius: RoveRadius.cardAll,
                               side: BorderSide(
                                 color: selected
-                                    ? RoveColors.primary
-                                    : RoveColors.border,
+                                    ? context.colors.primary
+                                    : context.colors.border,
                               ),
                             ),
                             clipBehavior: Clip.antiAlias,

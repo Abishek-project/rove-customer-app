@@ -192,31 +192,31 @@ void main() {
     });
   });
 
-  testWidgets(
-    'vehicle card shows specs, daily price, trip total and delivery',
-    (tester) async {
-      setUpTimeZones();
-      final stack = MockStack();
-      await stack.signInAe();
-      final p = testPeriod();
-      final v = (await stack.vehicles.search(
-        VehicleQuery(
-          countryCode: 'AE',
-          pickupAt: p.pickupAt,
-          returnAt: p.returnAt,
-        ),
-      )).items.firstWhere((v) => v.id == MockStack.aeEconomyId);
-      await pumpLocalized(
-        tester,
-        Scaffold(
-          body: VehicleCard(vehicle: v, onTap: () {}),
-        ),
-      );
-      expect(find.text('Toyota Corolla'), findsOneWidget);
-      expect(find.text('Automatic · 5 seats · Petrol'), findsOneWidget);
-      expect(find.text('AED 150 /day'), findsOneWidget);
-      expect(find.textContaining('total · 3 days'), findsOneWidget);
-      expect(find.text('Delivery'), findsOneWidget);
-    },
-  );
+  testWidgets('vehicle card shows title, icon specs, daily price and total', (
+    tester,
+  ) async {
+    setUpTimeZones();
+    final stack = MockStack();
+    await stack.signInAe();
+    final p = testPeriod();
+    final v = (await stack.vehicles.search(
+      VehicleQuery(
+        countryCode: 'AE',
+        pickupAt: p.pickupAt,
+        returnAt: p.returnAt,
+      ),
+    )).items.firstWhere((v) => v.id == MockStack.aeEconomyId);
+    await pumpLocalized(
+      tester,
+      Scaffold(
+        body: VehicleCard(vehicle: v, onTap: () {}),
+      ),
+    );
+    expect(find.text('Toyota Corolla 2024'), findsOneWidget);
+    for (final spec in ['Automatic', '5 seats', 'Petrol']) {
+      expect(find.textContaining(spec, findRichText: true), findsOneWidget);
+    }
+    expect(find.text('AED 150/day'), findsOneWidget);
+    expect(find.textContaining('total · 3 days'), findsOneWidget);
+  });
 }

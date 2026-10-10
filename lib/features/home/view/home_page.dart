@@ -7,9 +7,7 @@ import '../../../app/theme/rove_tokens.dart';
 import '../../../core/localization/l10n.dart';
 import '../../../core/preferences/preferences_cubit.dart';
 import '../../../core/utils/load_status.dart';
-import '../../../core/widgets/rove_button.dart';
-import '../../../core/widgets/rove_text_field.dart';
-import '../../../core/widgets/rove_wordmark.dart';
+import '../../../core/widgets/icon_circle.dart';
 import '../../../core/widgets/section.dart';
 import '../../../core/widgets/skeleton.dart';
 import '../../../core/widgets/state_views.dart';
@@ -19,6 +17,7 @@ import '../../../shared/models/vehicle.dart';
 import '../../../shared/repositories/vehicle_repository.dart';
 import '../../authentication/bloc/auth_bloc.dart';
 import '../../favorites/bloc/favorites_bloc.dart';
+import '../../favorites/view/favorite_button.dart';
 import '../../search/bloc/search_bloc.dart';
 import '../../search/bloc/trip_cubit.dart';
 import '../bloc/home_cubit.dart';
@@ -37,13 +36,19 @@ class HomePage extends StatelessWidget {
   }
 }
 
-/// Starts a search from the current trip and opens the results.
-void startSearch(BuildContext context, {VehicleCategory? category}) {
-  final trip = context.read<TripCubit>().state;
+/// Starts a search from the current trip and opens the results. With
+/// [replace], the results replace the current route stack (from the plan
+/// screen).
+void startSearch(
+  BuildContext context, {
+  VehicleCategory? category,
+  bool replace = false,
+}) {
+  final tripCubit = context.read<TripCubit>();
+  final trip = tripCubit.state;
   final code = trip.countryCode;
   if (code == null) return;
-  final error = trip.validate(context.read<TripCubit>().now);
-  final hasValidDates = error == null;
+  final hasValidDates = trip.validate(tripCubit.now) == null;
   context.read<SearchBloc>().add(
     SearchRequested(
       VehicleQuery(
@@ -55,7 +60,11 @@ void startSearch(BuildContext context, {VehicleCategory? category}) {
       ),
     ),
   );
-  context.push(Routes.search);
+  if (replace) {
+    context.go(Routes.search);
+  } else {
+    context.push(Routes.search);
+  }
 }
 
 class _HomeView extends StatefulWidget {
@@ -92,33 +101,20 @@ class _HomeViewState extends State<_HomeView> {
       listener: (context, _) => _loadFeatured(),
       child: Scaffold(
         body: SafeArea(
+          bottom: false,
           child: RefreshIndicator(
             onRefresh: () async => _loadFeatured(force: true),
             child: ListView(
-              padding: const EdgeInsets.only(bottom: RoveSpacing.xl),
+              padding: const EdgeInsets.only(bottom: RoveSpacing.lg),
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    RoveSpacing.md,
-                    RoveSpacing.sm,
-                    RoveSpacing.xs,
-                    0,
-                  ),
-                  child: Row(
-                    children: [
-                      const RoveWordmark(size: 24),
-                      const Spacer(),
-                      IconButton(
-                        tooltip: l10n.navProfile,
-                        icon: const Icon(Icons.person_outline_rounded),
-                        onPressed: () => context.go(Routes.profile),
-                      ),
-                    ],
-                  ),
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(20, 12, 20, 0),
+                  child: _Header(),
                 ),
-                const Padding(padding: RoveSpacing.page, child: _Greeting()),
-                const SizedBox(height: RoveSpacing.md),
-                const Padding(padding: RoveSpacing.page, child: _SearchPanel()),
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                  child: _SearchPill(),
+                ),
                 Padding(
                   padding: RoveSpacing.page,
                   child: SectionHeader(title: l10n.categoriesTitle),
@@ -141,111 +137,167 @@ class _HomeViewState extends State<_HomeView> {
   }
 }
 
-class _Greeting extends StatelessWidget {
-  const _Greeting();
+/// Avatar + "Hi {name}" + location row (opens the city picker) + bell.
+class _Header extends StatelessWidget {
+  const _Header();
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final c = context.colors;
+    final text = Theme.of(context).textTheme;
     final name = context.select<AuthBloc, String?>(
       (b) => b.state.me?.profile.fullName,
     );
+    final city = context.select<TripCubit, String?>((t) => t.state.city?.name);
     final first = name?.trim().split(' ').first;
-    return Text(
-      first == null || first.isEmpty
-          ? l10n.homeTitle
-          : l10n.homeGreeting(first),
-      style: Theme.of(context).textTheme.headlineSmall,
+    final initials = (name ?? '')
+        .trim()
+        .split(RegExp(r'\s+'))
+        .where((p) => p.isNotEmpty)
+        .take(2)
+        .map((p) => p[0].toUpperCase())
+        .join();
+    return Row(
+      children: [
+        Semantics(
+          button: true,
+          label: l10n.navProfile,
+          excludeSemantics: true,
+          child: GestureDetector(
+            onTap: () => context.go(Routes.profile),
+            child: CircleAvatar(
+              radius: 20,
+              backgroundColor: c.inputFill,
+              child: Text(initials, style: text.labelMedium),
+            ),
+          ),
+        ),
+        const SizedBox(width: RoveSpacing.sm),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                first == null || first.isEmpty
+                    ? l10n.homeTitle
+                    : l10n.homeGreeting(first),
+                style: text.bodyMedium?.copyWith(color: c.textSecondary),
+              ),
+              InkWell(
+                key: const Key('home-city'),
+                onTap: () => showCitySheet(context),
+                borderRadius: RoveRadius.smallAll,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 2),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.place_outlined,
+                        size: 16,
+                        color: c.textPrimary,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(city ?? l10n.selectCity, style: text.titleSmall),
+                      Icon(
+                        Icons.expand_more_rounded,
+                        size: 18,
+                        color: c.textPrimary,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        IconCircle(
+          icon: Icons.notifications_none_rounded,
+          tooltip: l10n.notificationsTooltip,
+          onPressed: () => context.push(Routes.settings),
+        ),
+      ],
     );
   }
 }
 
-class _SearchPanel extends StatelessWidget {
-  const _SearchPanel();
+/// Full-width pill; opens the plan-your-trip screen. The trip dates sit
+/// underneath as a quiet line.
+class _SearchPill extends StatelessWidget {
+  const _SearchPill();
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BlocBuilder<TripCubit, TripState>(
-      builder: (context, trip) {
-        final error = trip.validate(context.read<TripCubit>().now);
-        return RoveCard(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              RoveSelectField(
-                key: const Key('home-city'),
-                label: l10n.pickupCityLabel,
-                value: trip.city?.name,
-                placeholder: l10n.selectCity,
-                icon: Icons.place_outlined,
-                onTap: () => showCitySheet(context),
-              ),
-              const SizedBox(height: RoveSpacing.md),
-              Row(
-                children: [
-                  Expanded(
-                    child: RoveSelectField(
-                      key: const Key('home-pickup'),
-                      label: l10n.pickupLabel,
-                      value: trip.pickupAt == null
-                          ? null
-                          : compactDateTime(
-                              context,
-                              trip.pickupAt!,
-                              trip.timezone,
-                            ),
-                      placeholder: l10n.pickDate,
-                      icon: Icons.calendar_today_outlined,
-                      onTap: () => context.push(Routes.dates),
-                    ),
+    final c = context.colors;
+    final trip = context.watch<TripCubit>().state;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Semantics(
+          button: true,
+          label: l10n.searchPlaceholder,
+          excludeSemantics: true,
+          child: Material(
+            key: const Key('home-search-pill'),
+            color: c.surface,
+            shape: const StadiumBorder(),
+            child: InkWell(
+              customBorder: const StadiumBorder(),
+              onTap: () => context.push(Routes.plan),
+              child: SizedBox(
+                height: 52,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          l10n.searchPlaceholder,
+                          style: Theme.of(context).textTheme.bodyLarge
+                              ?.copyWith(color: c.textTertiary),
+                        ),
+                      ),
+                      Icon(Icons.search_rounded, color: c.textSecondary),
+                    ],
                   ),
-                  const SizedBox(width: RoveSpacing.sm),
+                ),
+              ),
+            ),
+          ),
+        ),
+        if (trip.hasDates)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+            child: InkWell(
+              key: const Key('home-dates'),
+              onTap: () => context.push(Routes.dates),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.calendar_today_outlined,
+                    size: 14,
+                    color: c.textSecondary,
+                  ),
+                  const SizedBox(width: 6),
                   Expanded(
-                    child: RoveSelectField(
-                      key: const Key('home-return'),
-                      label: l10n.returnLabel,
-                      value: trip.returnAt == null
-                          ? null
-                          : compactDateTime(
-                              context,
-                              trip.returnAt!,
-                              trip.timezone,
-                            ),
-                      placeholder: l10n.pickDate,
-                      icon: Icons.calendar_today_outlined,
-                      onTap: () => context.push(Routes.dates),
+                    child: Text(
+                      '${compactDateTime(context, trip.pickupAt!, trip.timezone)} → '
+                      '${compactDateTime(context, trip.returnAt!, trip.timezone)}',
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ),
                 ],
               ),
-              if (trip.hasDates && error != null) ...[
-                const SizedBox(height: RoveSpacing.xs),
-                Text(
-                  l10n.periodError(error),
-                  key: const Key('home-period-error'),
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodySmall?.copyWith(color: RoveColors.danger),
-                ),
-              ],
-              const SizedBox(height: RoveSpacing.md),
-              RoveButton(
-                key: const Key('home-search'),
-                label: l10n.searchCars,
-                expand: true,
-                onPressed: trip.countryCode == null || error != null
-                    ? null
-                    : () => startSearch(context),
-              ),
-            ],
+            ),
           ),
-        );
-      },
+      ],
     );
   }
 }
 
+/// Square 88×88 tiles: icon in a circle, label below.
 class _Categories extends StatelessWidget {
   const _Categories();
 
@@ -260,20 +312,53 @@ class _Categories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final c = context.colors;
     return SizedBox(
-      height: 44,
+      height: 88,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: RoveSpacing.page,
         itemCount: VehicleCategoryWire.browsable.length,
-        separatorBuilder: (_, _) => const SizedBox(width: RoveSpacing.xs),
+        separatorBuilder: (_, _) => const SizedBox(width: RoveSpacing.sm),
         itemBuilder: (context, i) {
           final category = VehicleCategoryWire.browsable[i];
-          return ActionChip(
-            key: ValueKey('category-${category.wire}'),
-            avatar: Icon(_icons[category], size: 18),
-            label: Text(l10n.category(category)),
-            onPressed: () => startSearch(context, category: category),
+          return Semantics(
+            button: true,
+            label: l10n.category(category),
+            excludeSemantics: true,
+            child: Material(
+              key: ValueKey('category-${category.wire}'),
+              color: c.surface,
+              borderRadius: RoveRadius.cardAll,
+              child: InkWell(
+                borderRadius: RoveRadius.cardAll,
+                onTap: () => startSearch(context, category: category),
+                child: SizedBox(
+                  width: 88,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 20,
+                        backgroundColor: c.inputFill,
+                        child: Icon(
+                          _icons[category],
+                          size: 20,
+                          color: c.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        l10n.category(category),
+                        style: Theme.of(context).textTheme.labelSmall,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           );
         },
       ),
@@ -289,15 +374,16 @@ class _HorizontalCars extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 250,
+      height: 292,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: RoveSpacing.page,
         itemCount: vehicles.length,
         separatorBuilder: (_, _) => const SizedBox(width: RoveSpacing.md),
         itemBuilder: (context, i) => VehicleCard(
-          width: 260,
+          width: 300,
           vehicle: vehicles[i],
+          favorite: FavoriteButton(vehicle: vehicles[i]),
           onTap: () => context.push(Routes.vehicle(vehicles[i].id)),
         ),
       ),
@@ -316,15 +402,15 @@ class _Featured extends StatelessWidget {
           case LoadStatus.initial:
           case LoadStatus.loading:
             return SizedBox(
-              height: 250,
+              height: 292,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 padding: RoveSpacing.page,
                 physics: const NeverScrollableScrollPhysics(),
                 children: const [
-                  VehicleCardSkeleton(width: 260),
+                  VehicleCardSkeleton(width: 300),
                   SizedBox(width: RoveSpacing.md),
-                  VehicleCardSkeleton(width: 260),
+                  VehicleCardSkeleton(width: 300),
                 ],
               ),
             );
@@ -389,10 +475,10 @@ class _SavedStrip extends StatelessWidget {
     );
     final cityId = context.select<TripCubit, String?>((c) => c.state.city?.id);
     // Prices are per city/currency, so only show cars from the current city.
-    final inCountry = saved
+    final inCity = saved
         .where((v) => cityId == null || v.city.id == cityId)
         .toList();
-    if (inCountry.isEmpty) return const SizedBox.shrink();
+    if (inCity.isEmpty) return const SizedBox.shrink();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -404,7 +490,7 @@ class _SavedStrip extends StatelessWidget {
             onAction: () => context.go(Routes.saved),
           ),
         ),
-        _HorizontalCars(vehicles: inCountry),
+        _HorizontalCars(vehicles: inCity),
       ],
     );
   }
@@ -416,13 +502,18 @@ class _Trust extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final c = context.colors;
     final text = Theme.of(context).textTheme;
     Widget item(IconData icon, String title, String body) => Padding(
-      padding: const EdgeInsets.only(bottom: RoveSpacing.md),
+      padding: const EdgeInsets.symmetric(vertical: RoveSpacing.xs),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 22, color: RoveColors.primary),
+          CircleAvatar(
+            radius: 20,
+            backgroundColor: c.inputFill,
+            child: Icon(icon, size: 20, color: c.primary),
+          ),
           const SizedBox(width: RoveSpacing.md),
           Expanded(
             child: Column(
@@ -441,15 +532,21 @@ class _Trust extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         SectionHeader(title: l10n.trustTitle),
-        item(
-          Icons.receipt_long_outlined,
-          l10n.trustPricingTitle,
-          l10n.trustPricingBody,
-        ),
-        item(
-          Icons.verified_outlined,
-          l10n.trustPartnersTitle,
-          l10n.trustPartnersBody,
+        RoveCard(
+          child: Column(
+            children: [
+              item(
+                Icons.receipt_long_outlined,
+                l10n.trustPricingTitle,
+                l10n.trustPricingBody,
+              ),
+              item(
+                Icons.verified_outlined,
+                l10n.trustPartnersTitle,
+                l10n.trustPartnersBody,
+              ),
+            ],
+          ),
         ),
       ],
     );

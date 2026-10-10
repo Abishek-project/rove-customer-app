@@ -66,7 +66,9 @@ class InfoRow extends StatelessWidget {
           Expanded(
             child: Text(
               label,
-              style: text.bodyMedium?.copyWith(color: RoveColors.textSecondary),
+              style: text.bodyMedium?.copyWith(
+                color: context.colors.textSecondary,
+              ),
             ),
           ),
           const SizedBox(width: RoveSpacing.md),
@@ -124,7 +126,7 @@ class MutedText extends StatelessWidget {
     return Text(
       text,
       style: (small ? theme.bodySmall : theme.bodyMedium)?.copyWith(
-        color: RoveColors.textSecondary,
+        color: context.colors.textSecondary,
       ),
     );
   }
@@ -140,19 +142,11 @@ class BottomActionBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration: const BoxDecoration(
-        color: RoveColors.surface,
-        border: Border(top: BorderSide(color: RoveColors.border)),
-      ),
+      decoration: BoxDecoration(color: context.colors.background),
       child: SafeArea(
         top: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(
-            RoveSpacing.md,
-            RoveSpacing.sm,
-            RoveSpacing.md,
-            RoveSpacing.sm,
-          ),
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
           child: leading == null
               ? child
               : Row(

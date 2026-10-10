@@ -145,7 +145,7 @@ class _CitySheetState extends State<_CitySheet> {
                   : const Icon(Icons.near_me_outlined),
               title: Text(
                 l10n.useMyLocation,
-                style: text.bodyLarge?.copyWith(color: RoveColors.primary),
+                style: text.bodyLarge?.copyWith(color: context.colors.primary),
               ),
               subtitle: _message == null ? null : Text(_message!),
               onTap: _locating ? null : () => _useLocation(country),
@@ -156,7 +156,7 @@ class _CitySheetState extends State<_CitySheet> {
               contentPadding: EdgeInsets.zero,
               title: Text(city.name),
               trailing: city.id == selectedCity?.id
-                  ? const Icon(Icons.check_rounded, color: RoveColors.primary)
+                  ? Icon(Icons.check_rounded, color: context.colors.primary)
                   : null,
               onTap: () => _selectCity(city),
             ),

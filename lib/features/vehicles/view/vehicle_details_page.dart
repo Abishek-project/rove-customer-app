@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../app/routes.dart';
 import '../../../app/theme/rove_tokens.dart';
@@ -17,7 +19,8 @@ import '../../../core/widgets/vehicle_photo.dart';
 import '../../../shared/models/enums.dart';
 import '../../../shared/models/vehicle.dart';
 import '../../../shared/repositories/vehicle_repository.dart';
-import '../../favorites/bloc/favorites_bloc.dart';
+import '../../../core/widgets/vehicle_card.dart';
+import '../../favorites/view/favorite_button.dart';
 import '../../home/view/trip_summary.dart';
 import '../../search/bloc/trip_cubit.dart';
 import '../bloc/vehicle_details_cubit.dart';
@@ -61,6 +64,7 @@ class _DetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return BlocListener<TripCubit, TripState>(
       listenWhen: (a, b) =>
           a.pickupAt != b.pickupAt || a.returnAt != b.returnAt,
@@ -68,9 +72,29 @@ class _DetailsView extends StatelessWidget {
       child: BlocBuilder<VehicleDetailsCubit, VehicleDetailsState>(
         builder: (context, state) {
           final vehicle = state.vehicle;
+          final appBar = AppBar(
+            leadingWidth: 96,
+            leading: TextButton.icon(
+              key: const Key('details-back'),
+              onPressed: () => context.pop(),
+              icon: const Icon(Icons.chevron_left_rounded),
+              label: Text(l10n.back),
+              style: TextButton.styleFrom(
+                foregroundColor: context.colors.textPrimary,
+              ),
+            ),
+            title: Text(l10n.carDetailsTitle),
+            actions: [
+              if (vehicle != null)
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(end: 16),
+                  child: FavoriteButton(vehicle: vehicle.toSummary()),
+                ),
+            ],
+          );
           if (vehicle == null) {
             return Scaffold(
-              appBar: AppBar(),
+              appBar: appBar,
               body: state.status == LoadStatus.failure
                   ? ErrorState(
                       failure: state.failure!,
@@ -83,46 +107,12 @@ class _DetailsView extends StatelessWidget {
             );
           }
           return Scaffold(
-            appBar: AppBar(actions: [_SaveButton(vehicle: vehicle)]),
+            appBar: appBar,
             body: _DetailsBody(vehicle: vehicle, state: state),
             bottomNavigationBar: _BookBar(vehicle: vehicle, state: state),
           );
         },
       ),
-    );
-  }
-}
-
-class _SaveButton extends StatelessWidget {
-  const _SaveButton({required this.vehicle});
-
-  final VehicleDetail vehicle;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return BlocConsumer<FavoritesBloc, FavoritesState>(
-      listenWhen: (a, b) =>
-          b.toggleFailure != null && a.toggleFailure != b.toggleFailure,
-      listener: (context, _) => ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n.favoriteFailed))),
-      builder: (context, favorites) {
-        final saved = favorites.status == LoadStatus.initial
-            ? vehicle.isFavorite
-            : favorites.contains(vehicle.id);
-        return IconButton(
-          key: const Key('vehicle-save'),
-          tooltip: saved ? l10n.unsaveVehicle : l10n.saveVehicle,
-          icon: Icon(
-            saved ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-            color: saved ? RoveColors.primary : null,
-          ),
-          onPressed: () => context.read<FavoritesBloc>().add(
-            FavoriteToggled(vehicle.toSummary()),
-          ),
-        );
-      },
     );
   }
 }
@@ -136,6 +126,7 @@ class _DetailsBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final c = context.colors;
     final text = Theme.of(context).textTheme;
     final mileage = vehicle.mileagePolicy;
     final deliveryText = !vehicle.deliveryAvailable
@@ -143,100 +134,337 @@ class _DetailsBody extends StatelessWidget {
         : vehicle.deliveryFee.isZero
         ? l10n.detailsDeliveryFree
         : l10n.detailsDeliveryFee(vehicle.deliveryFee.format());
+    final mileageText = mileage.limitKmPerDay == null
+        ? l10n.mileageUnlimited
+        : [
+            l10n.mileageLimit(mileage.limitKmPerDay!),
+            if (!mileage.excessFeePerKm.isZero)
+              l10n.mileageExcess(mileage.excessFeePerKm.format()),
+          ].join('. ');
     return ListView(
-      padding: const EdgeInsets.only(bottom: RoveSpacing.xl),
+      padding: EdgeInsets.zero,
       children: [
         _Gallery(vehicle: vehicle),
-        Padding(
-          padding: RoveSpacing.page,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: RoveSpacing.md),
-              Text(vehicle.title, style: text.headlineSmall),
-              const SizedBox(height: 2),
-              MutedText(
-                '${vehicle.year} · ${l10n.category(vehicle.category)} · ${vehicle.city.name}',
-              ),
-              const SizedBox(height: RoveSpacing.md),
-              _PartnerRow(partner: vehicle.partner),
-              const SizedBox(height: RoveSpacing.xs),
-              MutedText(
-                vehicle.bookingMode == BookingMode.instant
-                    ? l10n.bookingModeInstant
-                    : l10n.bookingModeRequest,
-                small: true,
-              ),
-              SectionHeader(title: l10n.detailsSpecs),
-              InfoRow(
-                label: l10n.filterTransmission,
-                value: l10n.transmission(vehicle.transmission),
-              ),
-              InfoRow(
-                label: l10n.filterSeats,
-                value: l10n.seatsCount(vehicle.seats),
-              ),
-              if (vehicle.doors != null)
-                InfoRow(label: l10n.specDoors, value: '${vehicle.doors}'),
-              InfoRow(
-                label: l10n.filterFuel,
-                value: l10n.fuel(vehicle.fuelType),
-              ),
-              InfoRow(
-                label: l10n.specLuggage,
-                value: l10n.bagsCount(vehicle.luggage),
-              ),
-              if (vehicle.color != null)
-                InfoRow(label: l10n.specColor, value: vehicle.color),
-              if (vehicle.minRentalDays > 1)
-                InfoRow(
-                  label: l10n.specMinRental,
-                  value: l10n.daysCount(vehicle.minRentalDays),
+        const SizedBox(height: RoveSpacing.md),
+        Material(
+          color: c.surface,
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(RoveRadius.sheet),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 24, 20, 32),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(vehicle.title, style: text.headlineSmall),
+                const SizedBox(height: 2),
+                MutedText(
+                  '${vehicle.year} · ${l10n.category(vehicle.category)} · ${vehicle.city.name}',
                 ),
-              if (vehicle.description != null &&
-                  vehicle.description!.isNotEmpty) ...[
-                const SizedBox(height: RoveSpacing.sm),
-                MutedText(vehicle.description!),
+                const SizedBox(height: RoveSpacing.md),
+                _PartnerRow(partner: vehicle.partner),
+                const SizedBox(height: RoveSpacing.xs),
+                MutedText(
+                  vehicle.bookingMode == BookingMode.instant
+                      ? l10n.bookingModeInstant
+                      : l10n.bookingModeRequest,
+                  small: true,
+                ),
+                if (vehicle.description != null &&
+                    vehicle.description!.isNotEmpty) ...[
+                  const SizedBox(height: RoveSpacing.md),
+                  _ReadMore(text: vehicle.description!),
+                ],
+                const SizedBox(height: RoveSpacing.lg),
+                _SpecGrid(vehicle: vehicle),
+                if (vehicle.features.isNotEmpty) ...[
+                  SectionHeader(title: l10n.detailsFeatures),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      for (final f in vehicle.features)
+                        Chip(
+                          label: Text(f),
+                          visualDensity: VisualDensity.compact,
+                        ),
+                    ],
+                  ),
+                ],
+                SectionHeader(title: l10n.policiesTitle),
+                _PolicyTile(
+                  icon: Icons.event_busy_outlined,
+                  title: l10n.detailsCancellation,
+                  body: vehicle.cancellationPolicy.summary,
+                ),
+                _PolicyTile(
+                  icon: Icons.local_gas_station_outlined,
+                  title: l10n.detailsFuelPolicy,
+                  body: l10n.fuelPolicy(vehicle.fuelPolicy),
+                ),
+                _PolicyTile(
+                  icon: Icons.speed_outlined,
+                  title: l10n.detailsMileage,
+                  body: mileageText,
+                ),
+                _PolicyTile(
+                  icon: Icons.shield_outlined,
+                  title: l10n.detailsInsurance,
+                  body:
+                      (vehicle.insuranceInfo == null ||
+                          vehicle.insuranceInfo!.isEmpty)
+                      ? l10n.insuranceMissing
+                      : vehicle.insuranceInfo!,
+                ),
+                _PolicyTile(
+                  icon: Icons.local_shipping_outlined,
+                  title: l10n.detailsPickupDelivery,
+                  body: deliveryText,
+                ),
+                SectionHeader(title: l10n.locationTitle),
+                _LocationCard(vehicle: vehicle),
+                _PriceSection(vehicle: vehicle, state: state),
               ],
-              if (vehicle.features.isNotEmpty) ...[
-                SectionHeader(title: l10n.detailsFeatures),
-                MutedText(vehicle.features.join(' · ')),
-              ],
-              SectionHeader(title: l10n.detailsPickupDelivery),
-              Text(
-                vehicle.pickupLocation == null
-                    ? l10n.detailsPickupArranged
-                    : l10n.detailsPickupAt(vehicle.pickupLocation!.name),
-              ),
-              if (vehicle.pickupLocation?.address != null)
-                MutedText(vehicle.pickupLocation!.address!, small: true),
-              const SizedBox(height: RoveSpacing.xs),
-              Text(deliveryText),
-              SectionHeader(title: l10n.detailsMileage),
-              Text(
-                mileage.limitKmPerDay == null
-                    ? l10n.mileageUnlimited
-                    : l10n.mileageLimit(mileage.limitKmPerDay!),
-              ),
-              if (mileage.limitKmPerDay != null &&
-                  !mileage.excessFeePerKm.isZero)
-                MutedText(l10n.mileageExcess(mileage.excessFeePerKm.format())),
-              SectionHeader(title: l10n.detailsFuelPolicy),
-              Text(l10n.fuelPolicy(vehicle.fuelPolicy)),
-              SectionHeader(title: l10n.detailsCancellation),
-              Text(vehicle.cancellationPolicy.summary),
-              SectionHeader(title: l10n.detailsInsurance),
-              Text(
-                (vehicle.insuranceInfo == null ||
-                        vehicle.insuranceInfo!.isEmpty)
-                    ? l10n.insuranceMissing
-                    : vehicle.insuranceInfo!,
-              ),
-              _PriceSection(vehicle: vehicle, state: state),
-            ],
+            ),
           ),
         ),
       ],
+    );
+  }
+}
+
+class _ReadMore extends StatefulWidget {
+  const _ReadMore({required this.text});
+
+  final String text;
+
+  @override
+  State<_ReadMore> createState() => _ReadMoreState();
+}
+
+class _ReadMoreState extends State<_ReadMore> {
+  bool _expanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final style = Theme.of(
+      context,
+    ).textTheme.bodyMedium?.copyWith(color: context.colors.textSecondary);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AnimatedSize(
+          duration: RoveMotion.normal,
+          alignment: Alignment.topCenter,
+          child: Text(
+            widget.text,
+            style: style,
+            maxLines: _expanded ? null : 3,
+            overflow: _expanded ? null : TextOverflow.ellipsis,
+          ),
+        ),
+        if (widget.text.length > 140)
+          GestureDetector(
+            onTap: () => setState(() => _expanded = !_expanded),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Text(
+                _expanded ? context.l10n.readLess : context.l10n.readMore,
+                style: style?.copyWith(color: context.colors.textPrimary),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+/// Three-per-row spec tiles (`surface-2`, radius 16).
+class _SpecGrid extends StatelessWidget {
+  const _SpecGrid({required this.vehicle});
+
+  final VehicleDetail vehicle;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final c = context.colors;
+    final text = Theme.of(context).textTheme;
+    final mileage = vehicle.mileagePolicy.limitKmPerDay;
+    final tiles = [
+      (Icons.person_outline_rounded, l10n.filterSeats, '${vehicle.seats}'),
+      (
+        Icons.settings_outlined,
+        l10n.specTransmissionShort,
+        l10n.transmission(vehicle.transmission),
+      ),
+      (
+        fuelIcon(vehicle.fuelType),
+        l10n.filterFuel,
+        l10n.fuel(vehicle.fuelType),
+      ),
+      (
+        Icons.speed_outlined,
+        l10n.specMileage,
+        mileage == null
+            ? l10n.mileageUnlimitedShort
+            : l10n.mileagePerDayShort(mileage),
+      ),
+      (
+        Icons.account_balance_wallet_outlined,
+        l10n.specDeposit,
+        vehicle.deposit.formatCompact(),
+      ),
+      (Icons.luggage_outlined, l10n.specLuggage, '${vehicle.luggage}'),
+    ];
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        const gap = 10.0;
+        final width = (constraints.maxWidth - gap * 2) / 3;
+        return Wrap(
+          spacing: gap,
+          runSpacing: gap,
+          children: [
+            for (final (icon, label, value) in tiles)
+              Container(
+                width: width,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: c.inputFill,
+                  borderRadius: BorderRadius.circular(RoveRadius.tile),
+                ),
+                child: Semantics(
+                  label: '$label: $value',
+                  excludeSemantics: true,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(icon, size: 20, color: c.textSecondary),
+                      const SizedBox(height: 10),
+                      Text(
+                        label,
+                        style: text.bodySmall?.copyWith(color: c.textTertiary),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        value,
+                        style: text.titleSmall,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+/// A policy row with a chevron; opens the full text in a sheet.
+class _PolicyTile extends StatelessWidget {
+  const _PolicyTile({
+    required this.icon,
+    required this.title,
+    required this.body,
+  });
+
+  final IconData icon;
+  final String title;
+  final String body;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      leading: CircleAvatar(
+        radius: 20,
+        backgroundColor: c.inputFill,
+        child: Icon(icon, size: 20, color: c.textPrimary),
+      ),
+      title: Text(title),
+      subtitle: Text(body, maxLines: 1, overflow: TextOverflow.ellipsis),
+      trailing: Icon(Icons.chevron_right_rounded, color: c.textSecondary),
+      onTap: () => showModalBottomSheet<void>(
+        context: context,
+        useRootNavigator: true,
+        builder: (context) => SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: RoveSpacing.sm),
+                Text(body, style: Theme.of(context).textTheme.bodyLarge),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _LocationCard extends StatelessWidget {
+  const _LocationCard({required this.vehicle});
+
+  final VehicleDetail vehicle;
+
+  Future<void> _openMaps() async {
+    final location = vehicle.pickupLocation;
+    if (location == null) return;
+    final query = location.latitude != null && location.longitude != null
+        ? '${location.latitude},${location.longitude}'
+        : '${location.name}, ${location.address ?? vehicle.city.name}';
+    await launchUrl(
+      Uri.https('maps.apple.com', '/', {'q': query}),
+      mode: LaunchMode.externalApplication,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final c = context.colors;
+    final location = vehicle.pickupLocation;
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: c.inputFill,
+        borderRadius: BorderRadius.circular(RoveRadius.tile),
+      ),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 22,
+            backgroundColor: c.surface3,
+            child: Icon(Icons.place_outlined, color: c.primary),
+          ),
+          const SizedBox(width: RoveSpacing.md),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  location?.name ?? l10n.detailsPickupArranged,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+                if (location?.address != null)
+                  MutedText(location!.address!, small: true),
+              ],
+            ),
+          ),
+          if (location != null)
+            RoveButton.text(label: l10n.openInMaps, onPressed: _openMaps),
+        ],
+      ),
     );
   }
 }
@@ -256,40 +484,62 @@ class _GalleryState extends State<_Gallery> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final c = context.colors;
     final images = widget.vehicle.orderedImages;
     final label = l10n.vehicleImageLabel(widget.vehicle.title);
-    if (images.length <= 1) {
-      return Padding(
-        padding: RoveSpacing.page,
-        child: VehiclePhoto(
-          url: images.firstOrNull?.url ?? widget.vehicle.coverImageUrl,
-          semanticLabel: label,
-          memCacheWidth: 1200,
-        ),
-      );
-    }
+    final urls = images.isEmpty
+        ? [widget.vehicle.coverImageUrl]
+        : images.map((i) => i.url).toList();
     return Column(
       children: [
-        AspectRatio(
-          aspectRatio: 16 / 10,
-          child: PageView.builder(
-            itemCount: images.length,
-            onPageChanged: (i) => setState(() => _index = i),
-            itemBuilder: (context, i) => Padding(
-              padding: RoveSpacing.page,
-              child: VehiclePhoto(
-                url: images[i].url,
-                semanticLabel: label,
-                memCacheWidth: 1200,
-              ),
+        Padding(
+          padding: RoveSpacing.page,
+          child: AspectRatio(
+            aspectRatio: 4 / 3,
+            child: PageView.builder(
+              itemCount: urls.length,
+              onPageChanged: (i) => setState(() => _index = i),
+              itemBuilder: (context, i) {
+                final photo = VehiclePhoto(
+                  url: urls[i],
+                  semanticLabel: label,
+                  aspectRatio: 4 / 3,
+                  radius: RoveRadius.card,
+                  memCacheWidth: 1400,
+                );
+                return i == 0
+                    ? Hero(
+                        tag: 'vehicle-photo-${widget.vehicle.id}',
+                        child: photo,
+                      )
+                    : photo;
+              },
             ),
           ),
         ),
-        const SizedBox(height: RoveSpacing.xs),
-        Text(
-          l10n.vehiclePhotoCount(_index + 1, images.length),
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
+        if (urls.length > 1) ...[
+          const SizedBox(height: RoveSpacing.sm),
+          Semantics(
+            label: l10n.vehiclePhotoCount(_index + 1, urls.length),
+            excludeSemantics: true,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                for (var i = 0; i < urls.length; i++)
+                  AnimatedContainer(
+                    duration: RoveMotion.fast,
+                    margin: const EdgeInsets.symmetric(horizontal: 3),
+                    width: i == _index ? 18 : 6,
+                    height: 6,
+                    decoration: BoxDecoration(
+                      color: i == _index ? c.primary : c.textTertiary,
+                      borderRadius: RoveRadius.pillAll,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
       ],
     );
   }
@@ -303,14 +553,27 @@ class _PartnerRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final c = context.colors;
     return Row(
       children: [
-        const Icon(Icons.storefront_outlined, size: 20),
-        const SizedBox(width: RoveSpacing.xs),
+        CircleAvatar(
+          radius: 18,
+          backgroundColor: c.inputFill,
+          backgroundImage: partner.logoUrl == null
+              ? null
+              : CachedNetworkImageProvider(partner.logoUrl!),
+          child: partner.logoUrl == null
+              ? Text(
+                  partner.displayName.characters.first,
+                  style: Theme.of(context).textTheme.labelMedium,
+                )
+              : null,
+        ),
+        const SizedBox(width: RoveSpacing.sm),
         Expanded(
           child: Text(
             partner.displayName,
-            style: Theme.of(context).textTheme.labelMedium,
+            style: Theme.of(context).textTheme.labelLarge,
           ),
         ),
         StatusPill(
@@ -362,7 +625,9 @@ class _PriceSection extends StatelessWidget {
           const SizedBox(height: RoveSpacing.md),
           Text(
             l10n.chargesConditional,
-            style: text.labelMedium?.copyWith(color: RoveColors.textSecondary),
+            style: text.labelMedium?.copyWith(
+              color: context.colors.textSecondary,
+            ),
           ),
           PriceRow(
             label: l10n.extraKm,
@@ -385,6 +650,7 @@ class _BookBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final c = context.colors;
     final text = Theme.of(context).textTheme;
     final trip = context.watch<TripCubit>().state;
     final loading = state.status == LoadStatus.loading;
@@ -396,8 +662,10 @@ class _BookBar extends StatelessWidget {
         Text(
           estimate != null
               ? estimate.format()
-              : '${vehicle.dailyRate.formatCompact()} ${l10n.perDay}',
-          style: text.titleSmall,
+              : l10n.fromPerDay(
+                  '${vehicle.dailyRate.formatCompact()}${l10n.perDay}',
+                ),
+          style: text.titleMedium?.copyWith(fontWeight: FontWeight.w700),
         ),
         Text(
           state.hasDates ? tripDatesLabel(context, trip) : l10n.estimateNoDates,
@@ -423,7 +691,7 @@ class _BookBar extends StatelessWidget {
     } else {
       action = RoveButton(
         key: const Key('details-book'),
-        label: l10n.detailsBook,
+        label: l10n.bookNow,
         loading: loading,
         onPressed: state.isBookable
             ? () => context.push(Routes.checkout(vehicle.id))
@@ -435,7 +703,7 @@ class _BookBar extends StatelessWidget {
           ? Text(
               l10n.detailsUnavailable,
               key: const Key('details-unavailable'),
-              style: text.bodyMedium?.copyWith(color: RoveColors.danger),
+              style: text.bodyMedium?.copyWith(color: c.danger),
             )
           : leading,
       child: action,

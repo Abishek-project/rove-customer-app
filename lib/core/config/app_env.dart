@@ -13,6 +13,7 @@ class AppEnv {
     required this.supabaseAnonKey,
     required this.enableDevEmailLogin,
     required this.oauthRedirectUrl,
+    this.partnerPortalUrl = 'http://localhost:5173',
   });
 
   factory AppEnv.fromEnvironment() {
@@ -30,6 +31,10 @@ class AppEnv {
         'OAUTH_REDIRECT_URL',
         defaultValue: 'com.rove.customer://login-callback',
       ),
+      partnerPortalUrl: String.fromEnvironment(
+        'PARTNER_PORTAL_URL',
+        defaultValue: 'http://localhost:5173',
+      ),
     );
   }
 
@@ -39,6 +44,9 @@ class AppEnv {
   final String supabaseAnonKey;
   final bool enableDevEmailLogin;
   final String oauthRedirectUrl;
+
+  /// Partner dashboard, opened from "List your fleet on Rove".
+  final String partnerPortalUrl;
 
   bool get isMock => apiMode == ApiMode.mock;
 

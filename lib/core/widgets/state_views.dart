@@ -29,15 +29,15 @@ class EmptyState extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (icon != null) ...[
-              Icon(icon, size: 32, color: RoveColors.textTertiary),
+              Icon(icon, size: 32, color: context.colors.textTertiary),
               const SizedBox(height: RoveSpacing.md),
             ],
             Text(
               message,
               textAlign: TextAlign.center,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyLarge?.copyWith(color: RoveColors.textSecondary),
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: context.colors.textSecondary,
+              ),
             ),
             if (actionLabel != null && onAction != null) ...[
               const SizedBox(height: RoveSpacing.md),
@@ -76,7 +76,7 @@ class ErrorState extends StatelessWidget {
               child: Text(
                 message,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: RoveColors.textSecondary,
+                  color: context.colors.textSecondary,
                 ),
               ),
             ),
@@ -113,11 +113,20 @@ class InlineNotice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (bg, fg) = switch (tone) {
-      NoticeTone.info => (RoveColors.infoTint, RoveColors.info),
-      NoticeTone.warning => (RoveColors.warningTint, RoveColors.warning),
-      NoticeTone.danger => (RoveColors.dangerTint, RoveColors.danger),
-      NoticeTone.success => (RoveColors.successTint, RoveColors.success),
-      NoticeTone.neutral => (RoveColors.inputFill, RoveColors.textSecondary),
+      NoticeTone.info => (context.colors.infoTint, context.colors.info),
+      NoticeTone.warning => (
+        context.colors.warningTint,
+        context.colors.warning,
+      ),
+      NoticeTone.danger => (context.colors.dangerTint, context.colors.danger),
+      NoticeTone.success => (
+        context.colors.successTint,
+        context.colors.success,
+      ),
+      NoticeTone.neutral => (
+        context.colors.inputFill,
+        context.colors.textSecondary,
+      ),
     };
     return Semantics(
       liveRegion: tone == NoticeTone.danger,
@@ -168,9 +177,9 @@ class CenteredLoader extends StatelessWidget {
             const SizedBox(height: RoveSpacing.md),
             Text(
               label!,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(color: RoveColors.textSecondary),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: context.colors.textSecondary,
+              ),
             ),
           ],
         ],

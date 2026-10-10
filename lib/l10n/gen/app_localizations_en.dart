@@ -187,6 +187,44 @@ class AppLocalizationsEn extends AppLocalizations {
   String get welcomeGetStarted => 'Get started';
 
   @override
+  String get welcomeTagline => 'Premium car rental, simply.';
+
+  @override
+  String get logIn => 'Log in';
+
+  @override
+  String get skip => 'Skip';
+
+  @override
+  String get next => 'Next';
+
+  @override
+  String get onboarding1Title => 'Premium car rental in Dubai & Mumbai';
+
+  @override
+  String get onboarding1Body =>
+      'Compare cars from verified rental companies in the UAE and India.';
+
+  @override
+  String get onboarding2Title => 'The full price, before you book';
+
+  @override
+  String get onboarding2Body =>
+      'Taxes and fees included. Refundable deposits shown separately.';
+
+  @override
+  String get onboarding3Title => 'Book in minutes';
+
+  @override
+  String get onboarding3Body =>
+      'Upload your licence once, pay securely and track every booking.';
+
+  @override
+  String onboardingPage(int index, int count) {
+    return 'Page $index of $count';
+  }
+
+  @override
   String get countryTitle => 'Where are you renting?';
 
   @override
@@ -270,6 +308,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeTitle => 'Find a car';
+
+  @override
+  String get searchPlaceholder => 'Search cars';
+
+  @override
+  String get planTripTitle => 'Plan your trip';
+
+  @override
+  String get notificationsTooltip => 'Notifications';
+
+  @override
+  String get categoryAll => 'See all';
 
   @override
   String homeGreeting(String name) {
@@ -548,6 +598,52 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get detailsFeatures => 'Features';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get carDetailsTitle => 'Car details';
+
+  @override
+  String get readMore => 'Read more';
+
+  @override
+  String get readLess => 'Show less';
+
+  @override
+  String get bookNow => 'Book now';
+
+  @override
+  String fromPerDay(String price) {
+    return 'from $price';
+  }
+
+  @override
+  String get openInMaps => 'Open in Maps';
+
+  @override
+  String get policiesTitle => 'Policies';
+
+  @override
+  String get specMileage => 'Mileage';
+
+  @override
+  String get specDeposit => 'Deposit';
+
+  @override
+  String get specTransmissionShort => 'Transmission';
+
+  @override
+  String get mileageUnlimitedShort => 'Unlimited';
+
+  @override
+  String mileagePerDayShort(int km) {
+    return '$km km/day';
+  }
+
+  @override
+  String get locationTitle => 'Location';
 
   @override
   String get dailyRate => 'Daily rate';
@@ -1314,6 +1410,51 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileTitle => 'Profile';
+
+  @override
+  String get showProfile => 'Show profile';
+
+  @override
+  String get settingsGroup => 'Settings';
+
+  @override
+  String get personalInformation => 'Personal information';
+
+  @override
+  String get paymentMethods => 'Payment methods';
+
+  @override
+  String get paymentMethodsBody =>
+      'You choose how to pay at checkout. Rove never stores your card details.';
+
+  @override
+  String paymentMethodsAvailable(String country) {
+    return 'Available in $country';
+  }
+
+  @override
+  String get countryAndCity => 'Country and city';
+
+  @override
+  String get appearance => 'Appearance';
+
+  @override
+  String get appearanceSystem => 'System';
+
+  @override
+  String get appearanceDark => 'Dark';
+
+  @override
+  String get appearanceLight => 'Light';
+
+  @override
+  String get partnersGroup => 'Partners';
+
+  @override
+  String get listYourFleet => 'List your fleet on Rove';
+
+  @override
+  String get supportGroup => 'Support';
 
   @override
   String get profileEdit => 'Edit profile';

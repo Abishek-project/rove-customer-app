@@ -403,7 +403,7 @@ class _CancelDialogState extends State<_CancelDialog> {
                   l10n.failure(state.cancelFailure!),
                   style: Theme.of(
                     context,
-                  ).textTheme.bodySmall?.copyWith(color: RoveColors.danger),
+                  ).textTheme.bodySmall?.copyWith(color: context.colors.danger),
                 ),
               ],
             ],

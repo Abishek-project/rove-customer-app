@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../app/theme/rove_tokens.dart';
 
-enum RoveButtonVariant { primary, secondary, text }
+enum RoveButtonVariant { primary, secondary, outlined, text }
 
 /// The app's button. Shows a spinner and ignores taps while [loading], which
 /// is how double submissions are prevented at the UI level.
@@ -28,6 +28,16 @@ class RoveButton extends StatelessWidget {
     this.destructive = false,
   }) : variant = RoveButtonVariant.secondary;
 
+  const RoveButton.outlined({
+    super.key,
+    required this.label,
+    required this.onPressed,
+    this.loading = false,
+    this.expand = false,
+    this.icon,
+    this.destructive = false,
+  }) : variant = RoveButtonVariant.outlined;
+
   const RoveButton.text({
     super.key,
     required this.label,
@@ -51,7 +61,7 @@ class RoveButton extends StatelessWidget {
     final enabled = onPressed != null && !loading;
     final foreground = switch (variant) {
       RoveButtonVariant.primary => Colors.white,
-      _ => destructive ? RoveColors.danger : null,
+      _ => destructive ? context.colors.danger : null,
     };
     final child = AnimatedSwitcher(
       duration: RoveMotion.fast,
@@ -64,7 +74,7 @@ class RoveButton extends StatelessWidget {
                 strokeWidth: 2,
                 color: variant == RoveButtonVariant.primary
                     ? Colors.white
-                    : RoveColors.primary,
+                    : context.colors.primary,
               ),
             )
           : Row(
@@ -90,21 +100,31 @@ class RoveButton extends StatelessWidget {
       RoveButtonVariant.primary => FilledButton(
         onPressed: loading ? () {} : callback,
         style: destructive
-            ? FilledButton.styleFrom(backgroundColor: RoveColors.danger)
+            ? FilledButton.styleFrom(backgroundColor: context.colors.danger)
             : null,
         child: child,
       ),
-      RoveButtonVariant.secondary => OutlinedButton(
+      RoveButtonVariant.secondary => FilledButton(
+        onPressed: loading ? () {} : callback,
+        style: FilledButton.styleFrom(
+          backgroundColor: context.colors.inputFill,
+          foregroundColor: destructive
+              ? context.colors.danger
+              : context.colors.textPrimary,
+        ),
+        child: child,
+      ),
+      RoveButtonVariant.outlined => OutlinedButton(
         onPressed: loading ? () {} : callback,
         style: destructive
-            ? OutlinedButton.styleFrom(foregroundColor: RoveColors.danger)
+            ? OutlinedButton.styleFrom(foregroundColor: context.colors.danger)
             : null,
         child: child,
       ),
       RoveButtonVariant.text => TextButton(
         onPressed: loading ? () {} : callback,
         style: destructive
-            ? TextButton.styleFrom(foregroundColor: RoveColors.danger)
+            ? TextButton.styleFrom(foregroundColor: context.colors.danger)
             : null,
         child: child,
       ),

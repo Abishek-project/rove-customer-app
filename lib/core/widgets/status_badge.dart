@@ -17,18 +17,18 @@ class StatusPill extends StatelessWidget {
   final String label;
   final PillTone tone;
 
-  static (Color, Color) colors(PillTone tone) => switch (tone) {
-    PillTone.neutral => (RoveColors.inputFill, RoveColors.textSecondary),
-    PillTone.primary => (RoveColors.primaryTint, RoveColors.primary),
-    PillTone.success => (RoveColors.successTint, RoveColors.success),
-    PillTone.warning => (RoveColors.warningTint, RoveColors.warning),
-    PillTone.danger => (RoveColors.dangerTint, RoveColors.danger),
-    PillTone.info => (RoveColors.infoTint, RoveColors.info),
+  static (Color, Color) colors(PillTone tone, RovePalette c) => switch (tone) {
+    PillTone.neutral => (c.inputFill, c.textSecondary),
+    PillTone.primary => (c.primaryTint, c.primary),
+    PillTone.success => (c.successTint, c.success),
+    PillTone.warning => (c.warningTint, c.warning),
+    PillTone.danger => (c.dangerTint, c.danger),
+    PillTone.info => (c.infoTint, c.info),
   };
 
   @override
   Widget build(BuildContext context) {
-    final (background, foreground) = colors(tone);
+    final (background, foreground) = colors(tone, context.colors);
     return DecoratedBox(
       decoration: BoxDecoration(
         color: background,

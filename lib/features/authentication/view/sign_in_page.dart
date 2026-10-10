@@ -167,9 +167,9 @@ class _DevEmailFormState extends State<_DevEmailForm> {
         children: [
           Text(
             l10n.signInDevSection,
-            style: Theme.of(
-              context,
-            ).textTheme.labelMedium?.copyWith(color: RoveColors.textSecondary),
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: context.colors.textSecondary,
+            ),
           ),
           const SizedBox(height: RoveSpacing.sm),
           RoveTextField(

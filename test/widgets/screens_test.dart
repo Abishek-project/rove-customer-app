@@ -8,6 +8,7 @@ import 'package:rove_customer_app/features/authentication/bloc/auth_bloc.dart';
 import 'package:rove_customer_app/features/authentication/view/sign_in_page.dart';
 import 'package:rove_customer_app/features/booking/bloc/checkout_result.dart';
 import 'package:rove_customer_app/features/booking/view/booking_result_page.dart';
+import 'package:rove_customer_app/features/favorites/bloc/favorites_bloc.dart';
 import 'package:rove_customer_app/features/onboarding/bloc/countries_cubit.dart';
 import 'package:rove_customer_app/features/profile/view/profile_fields.dart';
 import 'package:rove_customer_app/features/search/bloc/search_bloc.dart';
@@ -42,6 +43,9 @@ void main() {
         tester,
         const SearchResultsPage(),
         blocs: [
+          BlocProvider<FavoritesBloc>(
+            create: (_) => FavoritesBloc(stack.favorites),
+          ),
           BlocProvider<SearchBloc>.value(value: search),
           BlocProvider<CountriesCubit>.value(value: countries),
         ],

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart' show ThemeMode;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,12 +15,16 @@ class PreferencesState extends Equatable {
     this.cityId,
     this.languageCode = 'en',
     this.recentlyViewed = const [],
+    this.themeMode = ThemeMode.dark,
   });
 
   final String? countryCode;
   final String? cityId;
   final String languageCode;
   final List<VehicleSummary> recentlyViewed;
+
+  /// Appearance: dark by default (DESIGN v2), or system / light.
+  final ThemeMode themeMode;
 
   bool get hasCountry => countryCode != null;
 
@@ -28,11 +33,13 @@ class PreferencesState extends Equatable {
     String? Function()? cityId,
     String? languageCode,
     List<VehicleSummary>? recentlyViewed,
+    ThemeMode? themeMode,
   }) => PreferencesState(
     countryCode: countryCode != null ? countryCode() : this.countryCode,
     cityId: cityId != null ? cityId() : this.cityId,
     languageCode: languageCode ?? this.languageCode,
     recentlyViewed: recentlyViewed ?? this.recentlyViewed,
+    themeMode: themeMode ?? this.themeMode,
   );
 
   @override
@@ -41,6 +48,7 @@ class PreferencesState extends Equatable {
     cityId,
     languageCode,
     recentlyViewed,
+    themeMode,
   ];
 }
 
@@ -51,6 +59,7 @@ class PreferencesCubit extends Cubit<PreferencesState> {
   static const _cityKey = 'prefs.city';
   static const _languageKey = 'prefs.language';
   static const _recentKey = 'prefs.recent';
+  static const _themeKey = 'prefs.theme';
   static const maxRecent = 10;
 
   final SharedPreferences _prefs;
@@ -73,6 +82,10 @@ class PreferencesCubit extends Cubit<PreferencesState> {
       cityId: prefs.getString(_cityKey),
       languageCode: prefs.getString(_languageKey) ?? 'en',
       recentlyViewed: recent,
+      themeMode: ThemeMode.values.firstWhere(
+        (m) => m.name == prefs.getString(_themeKey),
+        orElse: () => ThemeMode.dark,
+      ),
     );
   }
 
@@ -108,6 +121,11 @@ class PreferencesCubit extends Cubit<PreferencesState> {
   Future<void> setLanguage(String code) async {
     emit(state.copyWith(languageCode: code));
     await _prefs.setString(_languageKey, code);
+  }
+
+  Future<void> setThemeMode(ThemeMode mode) async {
+    emit(state.copyWith(themeMode: mode));
+    await _prefs.setString(_themeKey, mode.name);
   }
 
   Future<void> addRecentlyViewed(VehicleSummary vehicle) async {

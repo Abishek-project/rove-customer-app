@@ -170,7 +170,7 @@ class _Dropdown<T> extends StatelessWidget {
           isExpanded: true,
           decoration: InputDecoration(errorText: errorText),
           borderRadius: RoveRadius.smallAll,
-          dropdownColor: RoveColors.surface,
+          dropdownColor: context.colors.surface,
           hint: Text(context.l10n.notSet),
           items: [
             for (final e in items.entries)

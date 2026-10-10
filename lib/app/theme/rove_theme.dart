@@ -2,116 +2,134 @@ import 'package:flutter/material.dart';
 
 import 'rove_tokens.dart';
 
-/// Builds the Material 3 theme from the Rove tokens: one accent colour,
-/// flat surfaces, hairline borders, Inter at 400/500/600.
+/// Material 3 theme built from the Rove v2 tokens: dark by default, one
+/// sky-blue accent, pill controls, flat surfaces (shadows only on overlays).
 abstract final class RoveTheme {
-  /// [textTheme] lets the app inject Inter (google_fonts) while tests use
-  /// the default font.
-  static ThemeData light({TextTheme Function(TextTheme)? textTheme}) {
-    const scheme = ColorScheme(
-      brightness: Brightness.light,
-      primary: RoveColors.primary,
-      onPrimary: Colors.white,
-      primaryContainer: RoveColors.primaryTint,
-      onPrimaryContainer: RoveColors.primaryPressed,
-      secondary: RoveColors.textSecondary,
-      onSecondary: Colors.white,
-      secondaryContainer: RoveColors.inputFill,
-      onSecondaryContainer: RoveColors.textPrimary,
-      error: RoveColors.danger,
+  /// Bundled family declared in pubspec.yaml.
+  static const fontFamily = 'PlusJakartaSans';
+
+  /// [fontFamily] is null in tests (default test font).
+  static ThemeData dark({String? fontFamily}) =>
+      build(RovePalette.dark, Brightness.dark, fontFamily: fontFamily);
+
+  static ThemeData light({String? fontFamily}) =>
+      build(RovePalette.light, Brightness.light, fontFamily: fontFamily);
+
+  static ThemeData build(
+    RovePalette c,
+    Brightness brightness, {
+    String? fontFamily,
+  }) {
+    final scheme = ColorScheme(
+      brightness: brightness,
+      primary: c.primary,
+      onPrimary: c.onPrimary,
+      primaryContainer: c.primaryTint,
+      onPrimaryContainer: c.primary,
+      secondary: c.textSecondary,
+      onSecondary: c.background,
+      secondaryContainer: c.inputFill,
+      onSecondaryContainer: c.textPrimary,
+      error: c.danger,
       onError: Colors.white,
-      errorContainer: RoveColors.dangerTint,
-      onErrorContainer: RoveColors.danger,
-      surface: RoveColors.surface,
-      onSurface: RoveColors.textPrimary,
-      onSurfaceVariant: RoveColors.textSecondary,
-      surfaceContainerLowest: RoveColors.surface,
-      surfaceContainerLow: RoveColors.background,
-      surfaceContainer: RoveColors.background,
-      surfaceContainerHigh: RoveColors.inputFill,
-      surfaceContainerHighest: RoveColors.inputFill,
-      outline: RoveColors.border,
-      outlineVariant: RoveColors.border,
+      errorContainer: c.dangerTint,
+      onErrorContainer: c.danger,
+      surface: c.surface,
+      onSurface: c.textPrimary,
+      onSurfaceVariant: c.textSecondary,
+      surfaceContainerLowest: c.background,
+      surfaceContainerLow: c.surface,
+      surfaceContainer: c.surface,
+      surfaceContainerHigh: c.inputFill,
+      surfaceContainerHighest: c.surface3,
+      outline: c.border,
+      outlineVariant: c.border,
       shadow: Colors.black,
-      scrim: Colors.black54,
-      inverseSurface: RoveColors.textPrimary,
-      onInverseSurface: Colors.white,
-      inversePrimary: RoveColors.primaryTint,
+      scrim: Colors.black87,
+      inverseSurface: c.textPrimary,
+      onInverseSurface: c.background,
+      inversePrimary: c.primaryTint,
       surfaceTint: Colors.transparent,
     );
 
-    final base = _textTheme(ThemeData.light().textTheme);
-    final text = textTheme == null ? base : _textTheme(textTheme(base));
+    final base = brightness == Brightness.dark
+        ? ThemeData.dark().textTheme
+        : ThemeData.light().textTheme;
+    final text = _textTheme(
+      fontFamily == null ? base : base.apply(fontFamily: fontFamily),
+      c,
+    );
+    const pill = StadiumBorder();
 
     return ThemeData(
       useMaterial3: true,
+      brightness: brightness,
+      fontFamily: fontFamily,
       colorScheme: scheme,
-      scaffoldBackgroundColor: RoveColors.background,
+      scaffoldBackgroundColor: c.background,
+      canvasColor: c.background,
       textTheme: text,
+      extensions: [c],
       splashFactory: InkSparkle.splashFactory,
-      dividerTheme: const DividerThemeData(
-        color: RoveColors.border,
-        thickness: 1,
-        space: 1,
-      ),
+      dividerTheme: DividerThemeData(color: c.border, thickness: 1, space: 1),
       appBarTheme: AppBarTheme(
-        backgroundColor: RoveColors.background,
-        foregroundColor: RoveColors.textPrimary,
+        backgroundColor: c.background,
+        foregroundColor: c.textPrimary,
         elevation: 0,
         scrolledUnderElevation: 0,
-        centerTitle: false,
-        titleTextStyle: text.titleMedium,
+        centerTitle: true,
+        titleTextStyle: text.titleSmall,
       ),
-      iconTheme: const IconThemeData(color: RoveColors.textSecondary, size: 22),
+      iconTheme: IconThemeData(color: c.textSecondary, size: 22),
       cardTheme: CardThemeData(
-        color: RoveColors.surface,
+        color: c.surface,
         elevation: 0,
         margin: EdgeInsets.zero,
-        shape: RoundedRectangleBorder(
-          borderRadius: RoveRadius.cardAll,
-          side: const BorderSide(color: RoveColors.border),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: RoveRadius.cardAll),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          backgroundColor: RoveColors.primary,
-          foregroundColor: Colors.white,
-          disabledBackgroundColor: RoveColors.border,
-          disabledForegroundColor: RoveColors.textTertiary,
-          minimumSize: const Size(64, 48),
-          shape: RoundedRectangleBorder(borderRadius: RoveRadius.cardAll),
+          backgroundColor: c.primary,
+          foregroundColor: c.onPrimary,
+          disabledBackgroundColor: c.inputFill,
+          disabledForegroundColor: c.textTertiary,
+          minimumSize: const Size(64, 52),
+          shape: pill,
           textStyle: text.labelLarge,
           elevation: 0,
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: RoveColors.textPrimary,
-          minimumSize: const Size(64, 48),
-          side: const BorderSide(color: RoveColors.border),
-          shape: RoundedRectangleBorder(borderRadius: RoveRadius.cardAll),
+          foregroundColor: c.textPrimary,
+          minimumSize: const Size(64, 52),
+          side: BorderSide(color: c.textTertiary),
+          shape: pill,
           textStyle: text.labelLarge,
         ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: RoveColors.primary,
+          foregroundColor: c.primary,
           minimumSize: const Size(48, 44),
           textStyle: text.labelMedium,
-          shape: RoundedRectangleBorder(borderRadius: RoveRadius.smallAll),
+          shape: pill,
         ),
+      ),
+      iconButtonTheme: IconButtonThemeData(
+        style: IconButton.styleFrom(foregroundColor: c.textPrimary),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: RoveColors.inputFill,
+        fillColor: c.inputFill,
         isDense: true,
         contentPadding: const EdgeInsets.symmetric(
-          horizontal: 14,
-          vertical: 14,
+          horizontal: 16,
+          vertical: 15,
         ),
-        hintStyle: text.bodyLarge?.copyWith(color: RoveColors.textTertiary),
+        hintStyle: text.bodyLarge?.copyWith(color: c.textTertiary),
         helperStyle: text.bodySmall,
-        errorStyle: text.bodySmall?.copyWith(color: RoveColors.danger),
+        errorStyle: text.bodySmall?.copyWith(color: c.danger),
         border: OutlineInputBorder(
           borderRadius: RoveRadius.smallAll,
           borderSide: BorderSide.none,
@@ -122,63 +140,41 @@ abstract final class RoveTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: RoveRadius.smallAll,
-          borderSide: const BorderSide(color: RoveColors.primary, width: 1.5),
+          borderSide: BorderSide(color: c.primary, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: RoveRadius.smallAll,
-          borderSide: const BorderSide(color: RoveColors.danger),
+          borderSide: BorderSide(color: c.danger),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: RoveRadius.smallAll,
-          borderSide: const BorderSide(color: RoveColors.danger, width: 1.5),
+          borderSide: BorderSide(color: c.danger, width: 1.5),
         ),
       ),
       chipTheme: ChipThemeData(
-        backgroundColor: RoveColors.surface,
-        selectedColor: RoveColors.primaryTint,
-        side: const BorderSide(color: RoveColors.border),
-        shape: const StadiumBorder(),
+        backgroundColor: c.inputFill,
+        selectedColor: c.primary,
+        side: BorderSide.none,
+        shape: pill,
         labelStyle: text.bodyMedium,
-        secondaryLabelStyle: text.bodyMedium?.copyWith(
-          color: RoveColors.primary,
-        ),
+        secondaryLabelStyle: text.bodyMedium?.copyWith(color: c.onPrimary),
         showCheckmark: false,
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
       ),
-      navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: RoveColors.surface,
-        elevation: 0,
-        height: 64,
-        indicatorColor: RoveColors.primaryTint,
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: c.surface,
         surfaceTintColor: Colors.transparent,
-        labelTextStyle: WidgetStateProperty.resolveWith(
-          (states) => text.labelSmall?.copyWith(
-            color: states.contains(WidgetState.selected)
-                ? RoveColors.primary
-                : RoveColors.textSecondary,
-          ),
-        ),
-        iconTheme: WidgetStateProperty.resolveWith(
-          (states) => IconThemeData(
-            size: 22,
-            color: states.contains(WidgetState.selected)
-                ? RoveColors.primary
-                : RoveColors.textSecondary,
-          ),
-        ),
-      ),
-      bottomSheetTheme: const BottomSheetThemeData(
-        backgroundColor: RoveColors.surface,
-        surfaceTintColor: Colors.transparent,
+        modalBackgroundColor: c.surface,
         showDragHandle: true,
-        shape: RoundedRectangleBorder(
+        dragHandleColor: c.textTertiary,
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             top: Radius.circular(RoveRadius.sheet),
           ),
         ),
       ),
       dialogTheme: DialogThemeData(
-        backgroundColor: RoveColors.surface,
+        backgroundColor: c.surface,
         surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(RoveRadius.sheet),
@@ -187,83 +183,96 @@ abstract final class RoveTheme {
         contentTextStyle: text.bodyMedium,
       ),
       datePickerTheme: DatePickerThemeData(
-        backgroundColor: RoveColors.surface,
+        backgroundColor: c.surface,
         surfaceTintColor: Colors.transparent,
-        headerBackgroundColor: RoveColors.surface,
-        headerForegroundColor: RoveColors.textPrimary,
+        headerBackgroundColor: c.surface,
+        headerForegroundColor: c.textPrimary,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(RoveRadius.sheet),
         ),
       ),
       timePickerTheme: TimePickerThemeData(
-        backgroundColor: RoveColors.surface,
+        backgroundColor: c.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(RoveRadius.sheet),
         ),
       ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
-        backgroundColor: RoveColors.textPrimary,
-        contentTextStyle: text.bodyMedium?.copyWith(color: Colors.white),
+        backgroundColor: c.surface3,
+        contentTextStyle: text.bodyMedium?.copyWith(color: c.textPrimary),
+        actionTextColor: c.primary,
         shape: RoundedRectangleBorder(borderRadius: RoveRadius.smallAll),
       ),
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.all(Colors.white),
         trackColor: WidgetStateProperty.resolveWith(
-          (s) => s.contains(WidgetState.selected)
-              ? RoveColors.primary
-              : RoveColors.border,
+          (s) => s.contains(WidgetState.selected) ? c.primary : c.surface3,
         ),
         trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
       ),
       checkboxTheme: CheckboxThemeData(
         fillColor: WidgetStateProperty.resolveWith(
-          (s) => s.contains(WidgetState.selected) ? RoveColors.primary : null,
+          (s) => s.contains(WidgetState.selected) ? c.primary : null,
         ),
-        side: const BorderSide(color: RoveColors.textTertiary, width: 1.5),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+        checkColor: WidgetStateProperty.all(c.onPrimary),
+        side: BorderSide(color: c.textTertiary, width: 1.5),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
       ),
       radioTheme: RadioThemeData(
         fillColor: WidgetStateProperty.resolveWith(
-          (s) => s.contains(WidgetState.selected)
-              ? RoveColors.primary
-              : RoveColors.textTertiary,
+          (s) => s.contains(WidgetState.selected) ? c.primary : c.textTertiary,
         ),
       ),
-      progressIndicatorTheme: const ProgressIndicatorThemeData(
-        color: RoveColors.primary,
-        linearTrackColor: RoveColors.border,
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        color: c.primary,
+        linearTrackColor: c.inputFill,
       ),
       listTileTheme: ListTileThemeData(
         contentPadding: const EdgeInsetsDirectional.symmetric(horizontal: 16),
-        iconColor: RoveColors.textSecondary,
+        iconColor: c.textSecondary,
+        textColor: c.textPrimary,
         titleTextStyle: text.bodyLarge,
-        subtitleTextStyle: text.bodyMedium?.copyWith(
-          color: RoveColors.textSecondary,
-        ),
+        subtitleTextStyle: text.bodyMedium?.copyWith(color: c.textSecondary),
         minVerticalPadding: 12,
+      ),
+      segmentedButtonTheme: SegmentedButtonThemeData(
+        style: SegmentedButton.styleFrom(
+          backgroundColor: c.inputFill,
+          foregroundColor: c.textSecondary,
+          selectedBackgroundColor: c.primary,
+          selectedForegroundColor: c.onPrimary,
+          side: BorderSide.none,
+          shape: pill,
+        ),
+      ),
+      dropdownMenuTheme: DropdownMenuThemeData(
+        menuStyle: MenuStyle(
+          backgroundColor: WidgetStateProperty.all(c.inputFill),
+        ),
       ),
     );
   }
 
-  /// Type scale 12 / 14 / 16 / 18 / 22 / 28, weights 400 / 500 / 600.
-  static TextTheme _textTheme(TextTheme base) {
+  /// Plus Jakarta Sans scale: 12 / 14 / 16 / 18 / 22 / 28 / 34, weights
+  /// 400–700, tight tracking on large sizes.
+  static TextTheme _textTheme(TextTheme base, RovePalette c) {
     TextStyle? s(
       TextStyle? style,
       double size,
       FontWeight weight, {
-      Color color = RoveColors.textPrimary,
+      Color? color,
       double? height,
     }) => style?.copyWith(
       fontSize: size,
       fontWeight: weight,
-      color: color,
+      color: color ?? c.textPrimary,
       height: height,
-      letterSpacing: 0,
+      letterSpacing: size >= 22 ? -0.2 : 0,
     );
     return base.copyWith(
-      displaySmall: s(base.displaySmall, 28, FontWeight.w600, height: 1.2),
-      headlineMedium: s(base.headlineMedium, 28, FontWeight.w600, height: 1.2),
+      displaySmall: s(base.displaySmall, 34, FontWeight.w700, height: 1.15),
+      headlineMedium: s(base.headlineMedium, 28, FontWeight.w700, height: 1.2),
       headlineSmall: s(base.headlineSmall, 22, FontWeight.w600, height: 1.25),
       titleLarge: s(base.titleLarge, 22, FontWeight.w600, height: 1.25),
       titleMedium: s(base.titleMedium, 18, FontWeight.w600, height: 1.3),
@@ -274,10 +283,10 @@ abstract final class RoveTheme {
         base.bodySmall,
         12,
         FontWeight.w400,
-        color: RoveColors.textSecondary,
+        color: c.textSecondary,
         height: 1.4,
       ),
-      labelLarge: s(base.labelLarge, 16, FontWeight.w500),
+      labelLarge: s(base.labelLarge, 16, FontWeight.w600),
       labelMedium: s(base.labelMedium, 14, FontWeight.w500),
       labelSmall: s(base.labelSmall, 12, FontWeight.w500),
     );

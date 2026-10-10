@@ -13,6 +13,7 @@ import '../../../core/widgets/skeleton.dart';
 import '../../../core/widgets/state_views.dart';
 import '../../../core/widgets/vehicle_card.dart';
 import '../../../shared/models/enums.dart';
+import '../../favorites/view/favorite_button.dart';
 import '../../onboarding/bloc/countries_cubit.dart';
 import '../bloc/search_bloc.dart';
 
@@ -125,7 +126,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                             ? l10n.searchResultsCount(state.meta.total)
                             : '',
                         style: text.bodyMedium?.copyWith(
-                          color: RoveColors.textSecondary,
+                          color: context.colors.textSecondary,
                         ),
                       ),
                     ),
@@ -233,6 +234,8 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
               return VehicleCard(
                 key: ValueKey('vehicle-${vehicle.id}'),
                 vehicle: vehicle,
+                favorite: FavoriteButton(vehicle: vehicle),
+                hero: true,
                 onTap: () => context.push(Routes.vehicle(vehicle.id)),
               );
             },

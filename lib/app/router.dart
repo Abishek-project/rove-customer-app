@@ -15,10 +15,13 @@ import '../features/booking/view/checkout_page.dart';
 import '../features/favorites/view/saved_page.dart';
 import '../features/home/view/dates_page.dart';
 import '../features/home/view/home_page.dart';
+import '../features/home/view/plan_trip_page.dart';
 import '../features/onboarding/view/country_page.dart';
+import '../features/onboarding/view/onboarding_page.dart';
 import '../features/onboarding/view/splash_page.dart';
 import '../features/onboarding/view/welcome_page.dart';
 import '../features/profile/view/edit_profile_page.dart';
+import '../features/profile/view/payment_methods_page.dart';
 import '../features/profile/view/profile_page.dart';
 import '../features/profile/view/settings_page.dart';
 import '../features/profile/view/verification_page.dart';
@@ -76,6 +79,10 @@ GoRouter buildRouter({
       GoRoute(path: Routes.splash, builder: (_, _) => const SplashPage()),
       GoRoute(path: Routes.welcome, builder: (_, _) => const WelcomePage()),
       GoRoute(path: Routes.country, builder: (_, _) => const CountryPage()),
+      GoRoute(
+        path: Routes.onboarding,
+        builder: (_, _) => const OnboardingPage(),
+      ),
       GoRoute(path: Routes.signIn, builder: (_, _) => const SignInPage()),
       GoRoute(
         path: Routes.authCallback,
@@ -118,6 +125,11 @@ GoRouter buildRouter({
         path: Routes.dates,
         parentNavigatorKey: rootNavigatorKey,
         pageBuilder: (_, state) => modal(state, const DatesPage()),
+      ),
+      GoRoute(
+        path: Routes.plan,
+        parentNavigatorKey: rootNavigatorKey,
+        pageBuilder: (_, state) => modal(state, const PlanTripPage()),
       ),
       GoRoute(
         path: Routes.filters,
@@ -205,6 +217,10 @@ GoRouter buildRouter({
                     builder: (_, _) => const EditProfilePage(),
                   ),
                   GoRoute(
+                    path: 'payment-methods',
+                    builder: (_, _) => const PaymentMethodsPage(),
+                  ),
+                  GoRoute(
                     path: 'settings',
                     builder: (_, _) => const SettingsPage(),
                   ),
@@ -232,7 +248,8 @@ GoRouter buildRouter({
   );
 }
 
-/// The four-tab shell: Explore, Bookings, Saved, Profile.
+/// The four-tab shell with a floating pill nav (DESIGN v2): icon-only
+/// circles, the active one filled with the accent; labels via semantics.
 class _Shell extends StatelessWidget {
   const _Shell({required this.shell});
 
@@ -241,41 +258,118 @@ class _Shell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final c = context.colors;
+    final items = [
+      (Icons.explore_outlined, Icons.explore, l10n.navExplore, 'nav-explore'),
+      (
+        Icons.event_note_outlined,
+        Icons.event_note,
+        l10n.navBookings,
+        'nav-bookings',
+      ),
+      (
+        Icons.favorite_border_rounded,
+        Icons.favorite_rounded,
+        l10n.navSaved,
+        'nav-saved',
+      ),
+      (
+        Icons.person_outline_rounded,
+        Icons.person_rounded,
+        l10n.navProfile,
+        'nav-profile',
+      ),
+    ];
     return Scaffold(
       body: shell,
-      bottomNavigationBar: DecoratedBox(
-        decoration: const BoxDecoration(
-          border: Border(top: BorderSide(color: RoveColors.border)),
+      bottomNavigationBar: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 8, 0, 12),
+          child: Center(
+            heightFactor: 1,
+            child: Container(
+              height: 64,
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              decoration: BoxDecoration(
+                color: c.inputFill,
+                borderRadius: RoveRadius.pillAll,
+                boxShadow: [
+                  BoxShadow(
+                    color: c.overlayShadow,
+                    blurRadius: 30,
+                    offset: const Offset(0, 8),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  for (final (i, (icon, activeIcon, label, key))
+                      in items.indexed)
+                    _NavButton(
+                      key: Key(key),
+                      icon: i == shell.currentIndex ? activeIcon : icon,
+                      label: label,
+                      selected: i == shell.currentIndex,
+                      onTap: () => shell.goBranch(
+                        i,
+                        initialLocation: i == shell.currentIndex,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
         ),
-        child: NavigationBar(
-          selectedIndex: shell.currentIndex,
-          onDestinationSelected: (i) =>
-              shell.goBranch(i, initialLocation: i == shell.currentIndex),
-          destinations: [
-            NavigationDestination(
-              key: const Key('nav-explore'),
-              icon: const Icon(Icons.search_rounded),
-              label: l10n.navExplore,
+      ),
+    );
+  }
+}
+
+class _NavButton extends StatelessWidget {
+  const _NavButton({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      excludeSemantics: true,
+      child: Tooltip(
+        message: label,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Material(
+            color: selected ? c.primary : Colors.transparent,
+            shape: const CircleBorder(),
+            child: InkWell(
+              customBorder: const CircleBorder(),
+              onTap: onTap,
+              child: SizedBox(
+                width: 48,
+                height: 48,
+                child: Icon(
+                  icon,
+                  size: 22,
+                  color: selected ? c.onPrimary : c.textSecondary,
+                ),
+              ),
             ),
-            NavigationDestination(
-              key: const Key('nav-bookings'),
-              icon: const Icon(Icons.event_note_outlined),
-              selectedIcon: const Icon(Icons.event_note_rounded),
-              label: l10n.navBookings,
-            ),
-            NavigationDestination(
-              key: const Key('nav-saved'),
-              icon: const Icon(Icons.favorite_border_rounded),
-              selectedIcon: const Icon(Icons.favorite_rounded),
-              label: l10n.navSaved,
-            ),
-            NavigationDestination(
-              key: const Key('nav-profile'),
-              icon: const Icon(Icons.person_outline_rounded),
-              selectedIcon: const Icon(Icons.person_rounded),
-              label: l10n.navProfile,
-            ),
-          ],
+          ),
         ),
       ),
     );

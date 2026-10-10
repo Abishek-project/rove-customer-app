@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../app/routes.dart';
+import '../../../core/config/app_env.dart';
 import '../../../app/theme/rove_tokens.dart';
 import '../../../core/errors/api_failure.dart';
 import '../../../core/localization/l10n.dart';
 import '../../../core/time/zoned_time.dart';
 import '../../../core/widgets/rove_button.dart';
-import '../../../core/widgets/section.dart';
+import '../../../core/widgets/grouped_list.dart';
 import '../../../core/widgets/state_views.dart';
 import '../../../core/widgets/status_badge.dart';
 import '../../../shared/models/enums.dart';
@@ -80,6 +82,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final c = context.colors;
     final text = Theme.of(context).textTheme;
     final me = context.select<AuthBloc, Me?>((b) => b.state.me);
     final countries = context.watch<CountriesCubit>().state;
@@ -87,126 +90,213 @@ class ProfilePage extends StatelessWidget {
     final country = countries.byCode(profile.countryCode);
     final city = country?.cityById(profile.cityId);
     final deletion = profile.deletionRequestedAt;
-    Widget tile(
-      IconData icon,
-      String label,
-      VoidCallback onTap, {
-      Widget? trailing,
-      Key? key,
-    }) => ListTile(
-      key: key,
-      contentPadding: EdgeInsets.zero,
-      leading: Icon(icon),
-      title: Text(label),
-      trailing: trailing ?? const Icon(Icons.chevron_right_rounded),
-      onTap: onTap,
-    );
+    final initials = (profile.fullName ?? '')
+        .trim()
+        .split(RegExp(r'\s+'))
+        .where((p) => p.isNotEmpty)
+        .take(2)
+        .map((p) => p[0].toUpperCase())
+        .join();
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.profileTitle)),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: RoveSpacing.md),
-        children: [
-          const SizedBox(height: RoveSpacing.sm),
-          Text(profile.fullName ?? '', style: text.titleLarge),
-          if (me?.user.email != null) MutedText(me!.user.email!),
-          if (profile.phone != null) MutedText(profile.phone!),
-          if (country != null)
-            MutedText(
-              [city?.name, country.name].whereType<String>().join(', '),
-            ),
-          const SizedBox(height: RoveSpacing.sm),
-          Align(
-            alignment: AlignmentDirectional.centerStart,
-            child: RoveButton.secondary(
-              key: const Key('profile-edit'),
-              label: l10n.profileEdit,
-              onPressed: () => context.push(Routes.profileEdit),
-            ),
-          ),
-          if (deletion != null) ...[
-            const SizedBox(height: RoveSpacing.md),
-            InlineNotice(
-              message: l10n.deletionRequestedOn(
-                ZonedTime.formatDate(
-                  deletion,
-                  country?.timezone,
-                  locale: context.localeTag,
-                ),
+      body: SafeArea(
+        bottom: false,
+        child: ListView(
+          padding: const EdgeInsets.only(bottom: RoveSpacing.lg),
+          children: [
+            LargeTitle(l10n.profileTitle),
+            Padding(
+              padding: RoveSpacing.page,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: RoveSpacing.xs),
+                  Material(
+                    color: c.surface,
+                    borderRadius: RoveRadius.cardAll,
+                    child: InkWell(
+                      key: const Key('profile-edit'),
+                      borderRadius: RoveRadius.cardAll,
+                      onTap: () => context.push(Routes.profileEdit),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 28,
+                              backgroundColor: c.inputFill,
+                              child: Text(initials, style: text.titleMedium),
+                            ),
+                            const SizedBox(width: RoveSpacing.md),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    profile.fullName ?? '',
+                                    style: text.titleMedium,
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    [
+                                          me?.user.email,
+                                          [
+                                            city?.name,
+                                            country?.name,
+                                          ].whereType<String>().join(', '),
+                                        ]
+                                        .whereType<String>()
+                                        .where((s) => s.isNotEmpty)
+                                        .join(' · '),
+                                    style: text.bodySmall,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Text(
+                                    l10n.showProfile,
+                                    style: text.bodyMedium?.copyWith(
+                                      color: c.textSecondary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Icon(
+                              Icons.chevron_right_rounded,
+                              color: c.textSecondary,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  if (deletion != null) ...[
+                    const SizedBox(height: RoveSpacing.md),
+                    InlineNotice(
+                      message: l10n.deletionRequestedOn(
+                        ZonedTime.formatDate(
+                          deletion,
+                          country?.timezone,
+                          locale: context.localeTag,
+                        ),
+                      ),
+                      tone: NoticeTone.warning,
+                    ),
+                  ],
+                  const SizedBox(height: RoveSpacing.md),
+                  RowGroup(
+                    title: l10n.settingsGroup,
+                    children: [
+                      GroupRow(
+                        icon: Icons.person_outline_rounded,
+                        label: l10n.personalInformation,
+                        onTap: () => context.push(Routes.profileEdit),
+                      ),
+                      GroupRow(
+                        key: const Key('profile-verification'),
+                        icon: Icons.badge_outlined,
+                        label: l10n.profileVerification,
+                        onTap: () => context.push(Routes.verification),
+                        trailing: StatusPill(
+                          label: l10n.verificationStatus(
+                            profile.verificationStatus,
+                          ),
+                          tone: switch (profile.verificationStatus) {
+                            VerificationStatus.verified => PillTone.success,
+                            VerificationStatus.submitted => PillTone.info,
+                            VerificationStatus.rejected => PillTone.danger,
+                            _ => PillTone.neutral,
+                          },
+                        ),
+                      ),
+                      GroupRow(
+                        icon: Icons.credit_card_rounded,
+                        label: l10n.paymentMethods,
+                        onTap: () => context.push(Routes.paymentMethods),
+                      ),
+                      GroupRow(
+                        key: const Key('profile-settings'),
+                        icon: Icons.notifications_none_rounded,
+                        label: l10n.settingsNotifications,
+                        onTap: () => context.push(Routes.settings),
+                      ),
+                      GroupRow(
+                        icon: Icons.translate_rounded,
+                        label: l10n.settingsLanguage,
+                        onTap: () => context.push(Routes.settings),
+                      ),
+                      GroupRow(
+                        icon: Icons.public_rounded,
+                        label: l10n.countryAndCity,
+                        onTap: () => context.push(Routes.settings),
+                      ),
+                      GroupRow(
+                        icon: Icons.dark_mode_outlined,
+                        label: l10n.appearance,
+                        onTap: () => context.push(Routes.settings),
+                      ),
+                      GroupRow(
+                        icon: Icons.receipt_long_outlined,
+                        label: l10n.profileBookingHistory,
+                        onTap: () => context.go(Routes.bookings),
+                      ),
+                    ],
+                  ),
+                  RowGroup(
+                    title: l10n.partnersGroup,
+                    children: [
+                      GroupRow(
+                        icon: Icons.directions_car_outlined,
+                        label: l10n.listYourFleet,
+                        onTap: () => launchUrl(
+                          Uri.parse(context.read<AppEnv>().partnerPortalUrl),
+                          mode: LaunchMode.externalApplication,
+                        ),
+                      ),
+                    ],
+                  ),
+                  RowGroup(
+                    title: l10n.supportGroup,
+                    children: [
+                      GroupRow(
+                        key: const Key('profile-support'),
+                        icon: Icons.support_agent_outlined,
+                        label: l10n.profileSupport,
+                        onTap: () => context.push(Routes.support),
+                      ),
+                      GroupRow(
+                        icon: Icons.privacy_tip_outlined,
+                        label: l10n.profilePrivacy,
+                        onTap: () => context.push(Routes.privacy),
+                      ),
+                      GroupRow(
+                        icon: Icons.description_outlined,
+                        label: l10n.profileTerms,
+                        onTap: () => context.push(Routes.terms),
+                      ),
+                      GroupRow(
+                        key: const Key('profile-sign-out'),
+                        icon: Icons.logout_rounded,
+                        label: l10n.profileSignOut,
+                        destructive: true,
+                        showChevron: false,
+                        onTap: () => _signOut(context),
+                      ),
+                      if (deletion == null)
+                        GroupRow(
+                          key: const Key('profile-delete'),
+                          icon: Icons.delete_outline_rounded,
+                          label: l10n.deleteAccount,
+                          destructive: true,
+                          showChevron: false,
+                          onTap: () => _requestDeletion(context),
+                        ),
+                    ],
+                  ),
+                ],
               ),
-              tone: NoticeTone.warning,
             ),
           ],
-          const SizedBox(height: RoveSpacing.md),
-          tile(
-            Icons.badge_outlined,
-            l10n.profileVerification,
-            () => context.push(Routes.verification),
-            trailing: StatusPill(
-              label: l10n.verificationStatus(profile.verificationStatus),
-              tone: switch (profile.verificationStatus) {
-                VerificationStatus.verified => PillTone.success,
-                VerificationStatus.submitted => PillTone.info,
-                VerificationStatus.rejected => PillTone.danger,
-                _ => PillTone.neutral,
-              },
-            ),
-          ),
-          tile(
-            Icons.receipt_long_outlined,
-            l10n.profileBookingHistory,
-            () => context.go(Routes.bookings),
-          ),
-          tile(
-            Icons.favorite_border_rounded,
-            l10n.savedTitle,
-            () => context.go(Routes.saved),
-          ),
-          tile(
-            Icons.tune_rounded,
-            l10n.profileSettings,
-            () => context.push(Routes.settings),
-            key: const Key('profile-settings'),
-          ),
-          tile(
-            Icons.support_agent_outlined,
-            l10n.profileSupport,
-            () => context.push(Routes.support),
-            key: const Key('profile-support'),
-          ),
-          tile(
-            Icons.privacy_tip_outlined,
-            l10n.profilePrivacy,
-            () => context.push(Routes.privacy),
-          ),
-          tile(
-            Icons.description_outlined,
-            l10n.profileTerms,
-            () => context.push(Routes.terms),
-          ),
-          const SizedBox(height: RoveSpacing.lg),
-          RoveButton.secondary(
-            key: const Key('profile-sign-out'),
-            label: l10n.profileSignOut,
-            expand: true,
-            onPressed: () => _signOut(context),
-          ),
-          if (deletion == null)
-            RoveButton.text(
-              key: const Key('profile-delete'),
-              label: l10n.deleteAccount,
-              destructive: true,
-              expand: true,
-              onPressed: () => _requestDeletion(context),
-            ),
-          const SizedBox(height: RoveSpacing.xl),
-          Center(
-            child: Text(
-              l10n.appName,
-              style: text.bodySmall?.copyWith(color: RoveColors.textTertiary),
-            ),
-          ),
-          const SizedBox(height: RoveSpacing.lg),
-        ],
+        ),
       ),
     );
   }

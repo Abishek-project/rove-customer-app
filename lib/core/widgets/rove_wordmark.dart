@@ -20,7 +20,7 @@ class RoveWordmark extends StatelessWidget {
         style: Theme.of(context).textTheme.headlineMedium?.copyWith(
           fontSize: size,
           fontWeight: FontWeight.w600,
-          color: color ?? RoveColors.primary,
+          color: color ?? context.colors.primary,
           letterSpacing: -0.5,
         ),
       ),

@@ -131,11 +131,11 @@ class RoveSelectField extends StatelessWidget {
           value: hasValue ? value : placeholder,
           excludeSemantics: true,
           child: Material(
-            color: RoveColors.inputFill,
+            color: context.colors.inputFill,
             shape: RoundedRectangleBorder(
               borderRadius: RoveRadius.smallAll,
               side: errorText != null
-                  ? const BorderSide(color: RoveColors.danger)
+                  ? BorderSide(color: context.colors.danger)
                   : BorderSide.none,
             ),
             child: InkWell(
@@ -153,8 +153,8 @@ class RoveSelectField extends StatelessWidget {
                         hasValue ? value! : (placeholder ?? ''),
                         style: theme.textTheme.bodyLarge?.copyWith(
                           color: hasValue
-                              ? RoveColors.textPrimary
-                              : RoveColors.textTertiary,
+                              ? context.colors.textPrimary
+                              : context.colors.textTertiary,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -171,7 +171,7 @@ class RoveSelectField extends StatelessWidget {
           Text(
             errorText!,
             style: theme.textTheme.bodySmall?.copyWith(
-              color: RoveColors.danger,
+              color: context.colors.danger,
             ),
           ),
         ],

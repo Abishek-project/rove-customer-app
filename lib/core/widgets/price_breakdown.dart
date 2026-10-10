@@ -27,7 +27,7 @@ class PriceRow extends StatelessWidget {
     final text = Theme.of(context).textTheme;
     final base = emphasize ? text.titleSmall : text.bodyMedium;
     final style = muted
-        ? base?.copyWith(color: RoveColors.textSecondary)
+        ? base?.copyWith(color: context.colors.textSecondary)
         : base;
     final value = suffix == null
         ? amount.format()
@@ -98,9 +98,9 @@ class PriceBreakdown extends StatelessWidget {
           const SizedBox(height: RoveSpacing.md),
           Text(
             l10n.priceConditionalTitle,
-            style: Theme.of(
-              context,
-            ).textTheme.labelMedium?.copyWith(color: RoveColors.textSecondary),
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: context.colors.textSecondary,
+            ),
           ),
           for (final charge in conditionalCharges)
             PriceRow(

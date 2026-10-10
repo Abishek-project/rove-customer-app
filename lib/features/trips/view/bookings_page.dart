@@ -6,6 +6,7 @@ import '../../../app/routes.dart';
 import '../../../app/theme/rove_tokens.dart';
 import '../../../core/localization/l10n.dart';
 import '../../../core/utils/load_status.dart';
+import '../../../core/widgets/grouped_list.dart';
 import '../../../core/widgets/skeleton.dart';
 import '../../../core/widgets/state_views.dart';
 import '../../../shared/models/enums.dart';
@@ -23,32 +24,59 @@ class BookingsPage extends StatelessWidget {
     return DefaultTabController(
       length: BookingGroup.values.length,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(l10n.bookingsTitle),
-          bottom: TabBar(
-            isScrollable: true,
-            tabAlignment: TabAlignment.start,
-            dividerColor: RoveColors.border,
-            indicatorColor: RoveColors.primary,
-            labelColor: RoveColors.primary,
-            unselectedLabelColor: RoveColors.textSecondary,
-            tabs: [
-              for (final g in BookingGroup.values)
-                Tab(key: ValueKey('tab-${g.name}'), text: l10n.bookingGroup(g)),
+        body: SafeArea(
+          bottom: false,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              LargeTitle(l10n.bookingsTitle),
+              // Segmented pill tabs, scrolling horizontally.
+              TabBar(
+                isScrollable: true,
+                tabAlignment: TabAlignment.start,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                labelPadding: const EdgeInsets.symmetric(horizontal: 4),
+                dividerColor: Colors.transparent,
+                indicatorSize: TabBarIndicatorSize.tab,
+                indicator: BoxDecoration(
+                  color: context.colors.primary,
+                  borderRadius: RoveRadius.pillAll,
+                ),
+                labelColor: context.colors.onPrimary,
+                unselectedLabelColor: context.colors.textSecondary,
+                splashBorderRadius: RoveRadius.pillAll,
+                tabs: [
+                  for (final g in BookingGroup.values)
+                    Tab(
+                      key: ValueKey('tab-${g.name}'),
+                      height: 40,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 14),
+                        child: Text(l10n.bookingGroup(g)),
+                      ),
+                    ),
+                ],
+              ),
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    for (final g in BookingGroup.values)
+                      BlocProvider(
+                        key: ValueKey(g),
+                        create: (context) => BookingListCubit(
+                          context.read<BookingRepository>(),
+                          g,
+                        )..load(),
+                        child: const _BookingList(),
+                      ),
+                  ],
+                ),
+              ),
             ],
           ),
-        ),
-        body: TabBarView(
-          children: [
-            for (final g in BookingGroup.values)
-              BlocProvider(
-                key: ValueKey(g),
-                create: (context) =>
-                    BookingListCubit(context.read<BookingRepository>(), g)
-                      ..load(),
-                child: const _BookingList(),
-              ),
-          ],
         ),
       ),
     );
@@ -105,8 +133,9 @@ class _BookingListState extends State<_BookingList>
                   if (n.metrics.extentAfter < 400) cubit.loadMore();
                   return false;
                 },
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(RoveSpacing.md),
+                child: ListView.separated(
+                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+                  separatorBuilder: (_, _) => const SizedBox(height: 12),
                   itemCount: state.bookings.length,
                   itemBuilder: (context, i) {
                     final booking = state.bookings[i];

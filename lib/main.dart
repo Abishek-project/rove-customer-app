@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'app/app.dart';
 import 'app/di.dart';
+import 'app/theme/rove_theme.dart';
 import 'core/config/app_env.dart';
 import 'core/time/zoned_time.dart';
 import 'shared/data/api/supabase_auth_repository.dart';
@@ -36,5 +36,6 @@ Future<void> main() async {
     deps = AppDependencies.live(env: env, prefs: prefs);
   }
 
-  runApp(RoveApp(deps: deps, textTheme: GoogleFonts.interTextTheme));
+  // Plus Jakarta Sans is bundled (assets/fonts, OFL); nothing is fetched.
+  runApp(RoveApp(deps: deps, fontFamily: RoveTheme.fontFamily));
 }

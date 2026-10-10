@@ -31,47 +31,51 @@ class BookingTile extends StatelessWidget {
         booking.reference,
       ].join(', '),
       excludeSemantics: true,
-      child: InkWell(
-        onTap: onTap,
+      child: Material(
+        color: context.colors.surface,
         borderRadius: RoveRadius.cardAll,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: RoveSpacing.sm),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                width: 88,
-                child: VehiclePhoto(
-                  url: booking.vehicle.coverImageUrl,
-                  semanticLabel: booking.vehicle.title,
-                  radius: RoveRadius.small,
-                  memCacheWidth: 300,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: RoveRadius.cardAll,
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 88,
+                  child: VehiclePhoto(
+                    url: booking.vehicle.coverImageUrl,
+                    semanticLabel: booking.vehicle.title,
+                    radius: RoveRadius.small,
+                    memCacheWidth: 300,
+                  ),
                 ),
-              ),
-              const SizedBox(width: RoveSpacing.md),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(booking.vehicle.title, style: text.titleSmall),
-                    const SizedBox(height: 2),
-                    Text(dates, style: text.bodySmall),
-                    Text(
-                      '${booking.city.name} · ${booking.reference}',
-                      style: text.bodySmall,
-                    ),
-                    const SizedBox(height: RoveSpacing.xs),
-                    Row(
-                      children: [
-                        BookingStatusBadge(status: booking.status),
-                        const Spacer(),
-                        Text(booking.total.format(), style: text.labelMedium),
-                      ],
-                    ),
-                  ],
+                const SizedBox(width: RoveSpacing.md),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(booking.vehicle.title, style: text.titleSmall),
+                      const SizedBox(height: 2),
+                      Text(dates, style: text.bodySmall),
+                      Text(
+                        '${booking.city.name} · ${booking.reference}',
+                        style: text.bodySmall,
+                      ),
+                      const SizedBox(height: RoveSpacing.xs),
+                      Row(
+                        children: [
+                          BookingStatusBadge(status: booking.status),
+                          const Spacer(),
+                          Text(booking.total.format(), style: text.labelMedium),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

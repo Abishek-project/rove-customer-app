@@ -54,7 +54,7 @@ class _SkeletonState extends State<Skeleton>
       width: widget.width,
       height: widget.height,
       decoration: BoxDecoration(
-        color: RoveColors.inputFill,
+        color: context.colors.inputFill,
         borderRadius: BorderRadius.circular(widget.radius),
       ),
     );

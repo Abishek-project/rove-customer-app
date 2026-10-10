@@ -26,12 +26,12 @@ import 'theme/rove_theme.dart';
 
 /// Root widget: repository providers (DI), app-wide blocs and the router.
 class RoveApp extends StatelessWidget {
-  const RoveApp({super.key, required this.deps, this.textTheme});
+  const RoveApp({super.key, required this.deps, this.fontFamily});
 
   final AppDependencies deps;
 
-  /// Injects Inter in the app; tests use the default font.
-  final TextTheme Function(TextTheme)? textTheme;
+  /// The bundled font in the app; tests use the default font.
+  final String? fontFamily;
 
   @override
   Widget build(BuildContext context) {
@@ -62,16 +62,16 @@ class RoveApp extends StatelessWidget {
           BlocProvider(create: (_) => SearchBloc(deps.vehicles)),
           BlocProvider(create: (_) => FavoritesBloc(deps.favorites)),
         ],
-        child: _AppView(textTheme: textTheme),
+        child: _AppView(fontFamily: fontFamily),
       ),
     );
   }
 }
 
 class _AppView extends StatefulWidget {
-  const _AppView({this.textTheme});
+  const _AppView({this.fontFamily});
 
-  final TextTheme Function(TextTheme)? textTheme;
+  final String? fontFamily;
 
   @override
   State<_AppView> createState() => _AppViewState();
@@ -82,7 +82,8 @@ class _AppViewState extends State<_AppView> {
     auth: context.read<AuthBloc>(),
     preferences: context.read<PreferencesCubit>(),
   );
-  late final ThemeData _theme = RoveTheme.light(textTheme: widget.textTheme);
+  late final ThemeData _light = RoveTheme.light(fontFamily: widget.fontFamily);
+  late final ThemeData _dark = RoveTheme.dark(fontFamily: widget.fontFamily);
 
   @override
   void dispose() {
@@ -145,23 +146,26 @@ class _AppViewState extends State<_AppView> {
           listener: (context, _) => _syncTrip(),
         ),
       ],
-      child: BlocSelector<PreferencesCubit, PreferencesState, String>(
-        selector: (s) => s.languageCode,
-        builder: (context, language) => MaterialApp.router(
-          onGenerateTitle: (context) => context.l10n.appName,
-          debugShowCheckedModeBanner: false,
-          theme: _theme,
-          routerConfig: _router,
-          locale: Locale(language),
-          supportedLocales: AppLocalizations.supportedLocales,
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-        ),
-      ),
+      child:
+          BlocSelector<PreferencesCubit, PreferencesState, (String, ThemeMode)>(
+            selector: (s) => (s.languageCode, s.themeMode),
+            builder: (context, prefs) => MaterialApp.router(
+              onGenerateTitle: (context) => context.l10n.appName,
+              debugShowCheckedModeBanner: false,
+              theme: _light,
+              darkTheme: _dark,
+              themeMode: prefs.$2,
+              routerConfig: _router,
+              locale: Locale(prefs.$1),
+              supportedLocales: AppLocalizations.supportedLocales,
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+            ),
+          ),
     );
   }
 }

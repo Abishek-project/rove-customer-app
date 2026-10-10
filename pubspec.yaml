@@ -29,7 +29,6 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   geolocator: ^14.0.1
-  google_fonts: ^8.2.1
   bloc_concurrency: ^0.3.0
 
 dev_dependencies:
@@ -44,3 +43,16 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
+  assets:
+    - assets/images/
+  fonts:
+    - family: PlusJakartaSans
+      fonts:
+        - asset: assets/fonts/PlusJakartaSans-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/PlusJakartaSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/PlusJakartaSans-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/PlusJakartaSans-Bold.ttf
+          weight: 700

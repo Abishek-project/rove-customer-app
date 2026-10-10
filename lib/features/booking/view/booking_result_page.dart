@@ -62,13 +62,13 @@ class _ResultView extends StatelessWidget {
         final (icon, tone, title, body) = switch (kind) {
           ResultKind.confirmed => (
             Icons.check_circle_outline_rounded,
-            RoveColors.success,
+            context.colors.success,
             l10n.resultConfirmedTitle,
             l10n.resultConfirmedBody(partner),
           ),
           ResultKind.pending => (
             Icons.schedule_rounded,
-            RoveColors.info,
+            context.colors.info,
             l10n.resultPendingTitle,
             l10n.resultPendingBody(
               partner,
@@ -77,43 +77,43 @@ class _ResultView extends StatelessWidget {
           ),
           ResultKind.held => (
             Icons.hourglass_bottom_rounded,
-            RoveColors.warning,
+            context.colors.warning,
             l10n.resultHeldTitle,
             l10n.resultHeldBody(time(booking?.holdExpiresAt)),
           ),
           ResultKind.declined => (
             Icons.credit_card_off_outlined,
-            RoveColors.danger,
+            context.colors.danger,
             l10n.resultDeclinedTitle,
             l10n.resultDeclinedBody(time(booking?.holdExpiresAt)),
           ),
           ResultKind.expired => (
             Icons.timer_off_outlined,
-            RoveColors.textSecondary,
+            context.colors.textSecondary,
             l10n.resultExpiredTitle,
             l10n.resultExpiredBody,
           ),
           ResultKind.rejected => (
             Icons.block_rounded,
-            RoveColors.danger,
+            context.colors.danger,
             l10n.resultRejectedTitle,
             l10n.resultRejectedBody,
           ),
           ResultKind.cancelled => (
             Icons.cancel_outlined,
-            RoveColors.textSecondary,
+            context.colors.textSecondary,
             l10n.resultCancelledTitle,
             '',
           ),
           ResultKind.unavailable => (
             Icons.event_busy_outlined,
-            RoveColors.textSecondary,
+            context.colors.textSecondary,
             l10n.resultUnavailableTitle,
             l10n.resultUnavailableBody,
           ),
           ResultKind.unknown => (
             Icons.help_outline_rounded,
-            RoveColors.warning,
+            context.colors.warning,
             l10n.resultUnknownTitle,
             l10n.resultUnknownBody,
           ),

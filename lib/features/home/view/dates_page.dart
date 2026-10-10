@@ -198,9 +198,9 @@ class _DatesPageState extends State<DatesPage> {
           else
             Text(
               l10n.daysCount(days),
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(color: RoveColors.textSecondary),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: context.colors.textSecondary,
+              ),
             ),
         ],
       ),

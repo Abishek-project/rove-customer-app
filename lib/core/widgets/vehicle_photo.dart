@@ -26,12 +26,12 @@ class VehiclePhoto extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fallback = DecoratedBox(
-      decoration: const BoxDecoration(color: RoveColors.inputFill),
+      decoration: BoxDecoration(color: context.colors.inputFill),
       child: Center(
         child: Icon(
           Icons.directions_car_outlined,
           size: 40,
-          color: RoveColors.textTertiary,
+          color: context.colors.textTertiary,
           semanticLabel: semanticLabel,
         ),
       ),

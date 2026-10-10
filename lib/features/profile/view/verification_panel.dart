@@ -78,7 +78,7 @@ class VerificationPanel extends StatelessWidget {
                               child: Text(
                                 l10n.docRejectedReason(doc.rejectionReason!),
                                 style: text.bodySmall?.copyWith(
-                                  color: RoveColors.danger,
+                                  color: context.colors.danger,
                                 ),
                               ),
                             ),
@@ -89,7 +89,7 @@ class VerificationPanel extends StatelessWidget {
                               child: Text(
                                 l10n.failure(state.uploadFailure!),
                                 style: text.bodySmall?.copyWith(
-                                  color: RoveColors.danger,
+                                  color: context.colors.danger,
                                 ),
                               ),
                             ),

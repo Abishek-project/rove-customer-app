@@ -181,7 +181,7 @@ class _PaymentSheet extends StatelessWidget {
                     child: Text(
                       l10n.paymentProcessing,
                       style: text.bodySmall?.copyWith(
-                        color: RoveColors.textSecondary,
+                        color: context.colors.textSecondary,
                       ),
                     ),
                   ),

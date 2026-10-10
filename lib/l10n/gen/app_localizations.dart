@@ -424,6 +424,72 @@ abstract class AppLocalizations {
   /// **'Get started'**
   String get welcomeGetStarted;
 
+  /// No description provided for @welcomeTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium car rental, simply.'**
+  String get welcomeTagline;
+
+  /// No description provided for @logIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Log in'**
+  String get logIn;
+
+  /// No description provided for @skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skip;
+
+  /// No description provided for @next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
+
+  /// No description provided for @onboarding1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium car rental in Dubai & Mumbai'**
+  String get onboarding1Title;
+
+  /// No description provided for @onboarding1Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Compare cars from verified rental companies in the UAE and India.'**
+  String get onboarding1Body;
+
+  /// No description provided for @onboarding2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'The full price, before you book'**
+  String get onboarding2Title;
+
+  /// No description provided for @onboarding2Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Taxes and fees included. Refundable deposits shown separately.'**
+  String get onboarding2Body;
+
+  /// No description provided for @onboarding3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Book in minutes'**
+  String get onboarding3Title;
+
+  /// No description provided for @onboarding3Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload your licence once, pay securely and track every booking.'**
+  String get onboarding3Body;
+
+  /// No description provided for @onboardingPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Page {index} of {count}'**
+  String onboardingPage(int index, int count);
+
   /// No description provided for @countryTitle.
   ///
   /// In en, this message translates to:
@@ -579,6 +645,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Find a car'**
   String get homeTitle;
+
+  /// No description provided for @searchPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Search cars'**
+  String get searchPlaceholder;
+
+  /// No description provided for @planTripTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan your trip'**
+  String get planTripTitle;
+
+  /// No description provided for @notificationsTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notificationsTooltip;
+
+  /// No description provided for @categoryAll.
+  ///
+  /// In en, this message translates to:
+  /// **'See all'**
+  String get categoryAll;
 
   /// No description provided for @homeGreeting.
   ///
@@ -1005,6 +1095,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Features'**
   String get detailsFeatures;
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
+  /// No description provided for @carDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Car details'**
+  String get carDetailsTitle;
+
+  /// No description provided for @readMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Read more'**
+  String get readMore;
+
+  /// No description provided for @readLess.
+  ///
+  /// In en, this message translates to:
+  /// **'Show less'**
+  String get readLess;
+
+  /// No description provided for @bookNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Book now'**
+  String get bookNow;
+
+  /// No description provided for @fromPerDay.
+  ///
+  /// In en, this message translates to:
+  /// **'from {price}'**
+  String fromPerDay(String price);
+
+  /// No description provided for @openInMaps.
+  ///
+  /// In en, this message translates to:
+  /// **'Open in Maps'**
+  String get openInMaps;
+
+  /// No description provided for @policiesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Policies'**
+  String get policiesTitle;
+
+  /// No description provided for @specMileage.
+  ///
+  /// In en, this message translates to:
+  /// **'Mileage'**
+  String get specMileage;
+
+  /// No description provided for @specDeposit.
+  ///
+  /// In en, this message translates to:
+  /// **'Deposit'**
+  String get specDeposit;
+
+  /// No description provided for @specTransmissionShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Transmission'**
+  String get specTransmissionShort;
+
+  /// No description provided for @mileageUnlimitedShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlimited'**
+  String get mileageUnlimitedShort;
+
+  /// No description provided for @mileagePerDayShort.
+  ///
+  /// In en, this message translates to:
+  /// **'{km} km/day'**
+  String mileagePerDayShort(int km);
+
+  /// No description provided for @locationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get locationTitle;
 
   /// No description provided for @dailyRate.
   ///
@@ -2325,6 +2499,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Profile'**
   String get profileTitle;
+
+  /// No description provided for @showProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Show profile'**
+  String get showProfile;
+
+  /// No description provided for @settingsGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsGroup;
+
+  /// No description provided for @personalInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal information'**
+  String get personalInformation;
+
+  /// No description provided for @paymentMethods.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment methods'**
+  String get paymentMethods;
+
+  /// No description provided for @paymentMethodsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You choose how to pay at checkout. Rove never stores your card details.'**
+  String get paymentMethodsBody;
+
+  /// No description provided for @paymentMethodsAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Available in {country}'**
+  String paymentMethodsAvailable(String country);
+
+  /// No description provided for @countryAndCity.
+  ///
+  /// In en, this message translates to:
+  /// **'Country and city'**
+  String get countryAndCity;
+
+  /// No description provided for @appearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearance;
+
+  /// No description provided for @appearanceSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get appearanceSystem;
+
+  /// No description provided for @appearanceDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get appearanceDark;
+
+  /// No description provided for @appearanceLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get appearanceLight;
+
+  /// No description provided for @partnersGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Partners'**
+  String get partnersGroup;
+
+  /// No description provided for @listYourFleet.
+  ///
+  /// In en, this message translates to:
+  /// **'List your fleet on Rove'**
+  String get listYourFleet;
+
+  /// No description provided for @supportGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Support'**
+  String get supportGroup;
 
   /// No description provided for @profileEdit.
   ///
