@@ -160,8 +160,8 @@ abstract class Booking with _$Booking {
     @Default(<BookingEvent>[]) List<BookingEvent> events,
     @Default(<String>[]) List<String> allowedActions,
     DateTime? createdAt,
-    // CONTRACT-ASSUMPTION: an optional open payment intent on held bookings
-    // so "pay" can resume from booking details (contract-requests.md).
+    // CONTRACTS v1.3: the open payment intent while allowedActions
+    // contains "pay" (status held), so payment can resume from details.
     PaymentIntent? payment,
   }) = _Booking;
 
