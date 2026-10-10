@@ -346,7 +346,7 @@ class _Categories extends StatelessWidget {
               child: AnimatedContainer(
                 duration: RoveMotion.fast,
                 decoration: BoxDecoration(
-                  color: selected ? c.primary : c.surface,
+                  color: selected ? c.accentFill : c.surface,
                   borderRadius: RoveRadius.cardAll,
                 ),
                 child: Material(
@@ -369,7 +369,7 @@ class _Categories extends StatelessWidget {
                             child: Icon(
                               _icons[category],
                               size: 20,
-                              color: selected ? c.primary : c.textPrimary,
+                              color: selected ? c.accentFill : c.textPrimary,
                             ),
                           ),
                           const SizedBox(height: 8),

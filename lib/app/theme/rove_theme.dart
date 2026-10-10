@@ -89,7 +89,7 @@ abstract final class RoveTheme {
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          backgroundColor: c.primary,
+          backgroundColor: c.accentFill,
           foregroundColor: c.onPrimary,
           disabledBackgroundColor: c.inputFill,
           disabledForegroundColor: c.textTertiary,
@@ -153,7 +153,7 @@ abstract final class RoveTheme {
       ),
       chipTheme: ChipThemeData(
         backgroundColor: c.inputFill,
-        selectedColor: c.primary,
+        selectedColor: c.accentFill,
         side: BorderSide.none,
         shape: pill,
         labelStyle: text.bodyMedium,
@@ -207,13 +207,13 @@ abstract final class RoveTheme {
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.all(Colors.white),
         trackColor: WidgetStateProperty.resolveWith(
-          (s) => s.contains(WidgetState.selected) ? c.primary : c.surface3,
+          (s) => s.contains(WidgetState.selected) ? c.accentFill : c.surface3,
         ),
         trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
       ),
       checkboxTheme: CheckboxThemeData(
         fillColor: WidgetStateProperty.resolveWith(
-          (s) => s.contains(WidgetState.selected) ? c.primary : null,
+          (s) => s.contains(WidgetState.selected) ? c.accentFill : null,
         ),
         checkColor: WidgetStateProperty.all(c.onPrimary),
         side: BorderSide(color: c.textTertiary, width: 1.5),
@@ -243,7 +243,7 @@ abstract final class RoveTheme {
         style: SegmentedButton.styleFrom(
           backgroundColor: c.inputFill,
           foregroundColor: c.textSecondary,
-          selectedBackgroundColor: c.primary,
+          selectedBackgroundColor: c.accentFill,
           selectedForegroundColor: c.onPrimary,
           side: BorderSide.none,
           shape: pill,

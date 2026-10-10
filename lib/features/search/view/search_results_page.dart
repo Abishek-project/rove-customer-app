@@ -262,7 +262,7 @@ class _ControlPill extends StatelessWidget {
     final c = context.colors;
     final fg = active ? c.onPrimary : c.textPrimary;
     return Material(
-      color: active ? c.primary : c.inputFill,
+      color: active ? c.accentFill : c.inputFill,
       shape: const StadiumBorder(),
       child: InkWell(
         customBorder: const StadiumBorder(),

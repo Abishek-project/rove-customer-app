@@ -17,6 +17,7 @@ class RovePalette extends ThemeExtension<RovePalette> {
     required this.primaryPressed,
     required this.primaryTint,
     required this.onPrimary,
+    required this.accentFill,
     required this.success,
     required this.successTint,
     required this.warning,
@@ -52,6 +53,11 @@ class RovePalette extends ThemeExtension<RovePalette> {
   final Color primaryTint;
   final Color onPrimary;
 
+  /// `accent-fill` — every fill behind white text or icons (filled buttons,
+  /// active nav circle, selected tiles/pills): white on it ≈ 4.6:1 (AA).
+  /// [primary] stays for icons, hearts, links, dots and focus.
+  final Color accentFill;
+
   final Color success;
   final Color successTint;
   final Color warning;
@@ -77,6 +83,7 @@ class RovePalette extends ThemeExtension<RovePalette> {
     primaryPressed: Color(0xFF3A91E0),
     primaryTint: Color(0x244BA3F2),
     onPrimary: Colors.white,
+    accentFill: Color(0xFF1E78CC),
     success: Color(0xFF34C77B),
     successTint: Color(0x2434C77B),
     warning: Color(0xFFF5A524),
@@ -101,6 +108,7 @@ class RovePalette extends ThemeExtension<RovePalette> {
     primaryPressed: Color(0xFF1A6FBC),
     primaryTint: Color(0x244BA3F2),
     onPrimary: Colors.white,
+    accentFill: Color(0xFF1E78CC),
     success: Color(0xFF1E9E5A),
     successTint: Color(0x2434C77B),
     warning: Color(0xFFB26B00),

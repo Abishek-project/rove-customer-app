@@ -42,7 +42,7 @@ class BookingsPage extends StatelessWidget {
                 dividerColor: Colors.transparent,
                 indicatorSize: TabBarIndicatorSize.tab,
                 indicator: BoxDecoration(
-                  color: context.colors.primary,
+                  color: context.colors.accentFill,
                   borderRadius: RoveRadius.pillAll,
                 ),
                 labelColor: context.colors.onPrimary,

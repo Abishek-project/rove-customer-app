@@ -101,7 +101,12 @@ class _AppViewState extends State<_AppView> {
     if (code == null) return;
     final country = countries.byCode(code);
     final trip = context.read<TripCubit>();
-    final city = country?.cityById(prefs.cityId) ?? country?.cities.firstOrNull;
+    // Preferred city, else the profile's city, else the country's first.
+    final profileCity = context.read<AuthBloc>().state.me?.profile.cityId;
+    final city =
+        country?.cityById(prefs.cityId) ??
+        country?.cityById(profileCity) ??
+        country?.cities.firstOrNull;
     if (trip.state.countryCode != code || trip.state.city?.id != city?.id) {
       trip.setCountry(code, city: city);
     }

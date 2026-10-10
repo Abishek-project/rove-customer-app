@@ -354,7 +354,7 @@ class _NavButton extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Material(
-            color: selected ? c.primary : Colors.transparent,
+            color: selected ? c.accentFill : Colors.transparent,
             shape: const CircleBorder(),
             child: InkWell(
               customBorder: const CircleBorder(),
