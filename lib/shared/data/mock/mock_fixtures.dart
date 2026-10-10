@@ -1,0 +1,537 @@
+// All mock data lives in this file. Shapes follow shared/CONTRACTS.md
+// exactly; widgets never see these maps directly — they go through the
+// Mock* repositories and the same fromJson parsers the live API uses.
+
+abstract final class MockIds {
+  static const cityDubai = '6a1f1c4e-0d5b-4a51-9a0e-1d2c3b4a5e01';
+  static const cityAbuDhabi = '6a1f1c4e-0d5b-4a51-9a0e-1d2c3b4a5e02';
+  static const citySharjah = '6a1f1c4e-0d5b-4a51-9a0e-1d2c3b4a5e03';
+  static const cityRak = '6a1f1c4e-0d5b-4a51-9a0e-1d2c3b4a5e04';
+  static const cityMumbai = '7b2e2d5f-1e6c-4b62-8b1f-2e3d4c5b6f01';
+  static const cityBengaluru = '7b2e2d5f-1e6c-4b62-8b1f-2e3d4c5b6f02';
+  static const cityDelhi = '7b2e2d5f-1e6c-4b62-8b1f-2e3d4c5b6f03';
+  static const cityGoa = '7b2e2d5f-1e6c-4b62-8b1f-2e3d4c5b6f04';
+
+  static const partnerDesertDrive = '9c3f3e60-2f7d-4c73-9c20-3f4e5d6c7a01';
+  static const partnerMumbaiMotors = '9c3f3e60-2f7d-4c73-9c20-3f4e5d6c7a02';
+
+  static const locDubaiMarina = 'ad4a4f71-3a8e-4d84-8d31-4a5f6e7d8b01';
+  static const locDubaiAirport = 'ad4a4f71-3a8e-4d84-8d31-4a5f6e7d8b02';
+  static const locMumbaiBkc = 'ad4a4f71-3a8e-4d84-8d31-4a5f6e7d8b03';
+  static const locMumbaiAirport = 'ad4a4f71-3a8e-4d84-8d31-4a5f6e7d8b04';
+
+  static const userAe = 'be5b5a82-4b9f-4e95-9e42-5b6a7f8e9c01';
+  static const userIn = 'be5b5a82-4b9f-4e95-9e42-5b6a7f8e9c02';
+  static const userGoogle = 'be5b5a82-4b9f-4e95-9e42-5b6a7f8e9c03';
+}
+
+final List<Map<String, dynamic>> mockCountries = [
+  {
+    'code': 'AE',
+    'name': 'United Arab Emirates',
+    'currency': 'AED',
+    'timezone': 'Asia/Dubai',
+    'taxLabel': 'VAT',
+    'taxRateBps': 500,
+    'platformFeeBps': 500,
+    'paymentMethods': ['card', 'apple_pay'],
+    'cities': [
+      _city(MockIds.cityDubai, 'Dubai', 'dubai', 'AE', 'Asia/Dubai'),
+      _city(MockIds.cityAbuDhabi, 'Abu Dhabi', 'abu-dhabi', 'AE', 'Asia/Dubai'),
+      _city(MockIds.citySharjah, 'Sharjah', 'sharjah', 'AE', 'Asia/Dubai'),
+      _city(
+        MockIds.cityRak,
+        'Ras Al Khaimah',
+        'ras-al-khaimah',
+        'AE',
+        'Asia/Dubai',
+      ),
+    ],
+  },
+  {
+    'code': 'IN',
+    'name': 'India',
+    'currency': 'INR',
+    'timezone': 'Asia/Kolkata',
+    'taxLabel': 'GST',
+    'taxRateBps': 1800,
+    'platformFeeBps': 500,
+    'paymentMethods': ['card', 'upi'],
+    'cities': [
+      _city(MockIds.cityMumbai, 'Mumbai', 'mumbai', 'IN', 'Asia/Kolkata'),
+      _city(
+        MockIds.cityBengaluru,
+        'Bengaluru',
+        'bengaluru',
+        'IN',
+        'Asia/Kolkata',
+      ),
+      _city(MockIds.cityDelhi, 'New Delhi', 'new-delhi', 'IN', 'Asia/Kolkata'),
+      _city(MockIds.cityGoa, 'Goa', 'goa', 'IN', 'Asia/Kolkata'),
+    ],
+  },
+];
+
+Map<String, dynamic> _city(
+  String id,
+  String name,
+  String slug,
+  String country,
+  String tz,
+) => {
+  'id': id,
+  'name': name,
+  'slug': slug,
+  'countryCode': country,
+  'timezone': tz,
+};
+
+/// Internal partner records (not an API shape).
+final Map<String, Map<String, dynamic>> mockPartners = {
+  MockIds.partnerDesertDrive: {
+    'id': MockIds.partnerDesertDrive,
+    'displayName': 'Desert Drive Rentals',
+    'verified': true,
+    'cityName': 'Dubai',
+    'logoUrl': null,
+    'countryCode': 'AE',
+  },
+  MockIds.partnerMumbaiMotors: {
+    'id': MockIds.partnerMumbaiMotors,
+    'displayName': 'Mumbai Motors',
+    'verified': true,
+    'cityName': 'Mumbai',
+    'logoUrl': null,
+    'countryCode': 'IN',
+  },
+};
+
+final List<Map<String, dynamic>> mockLocations = [
+  {
+    'id': MockIds.locDubaiMarina,
+    'name': 'Dubai Marina office',
+    'address': 'Marina Walk, Tower 3, Dubai Marina',
+    'cityId': MockIds.cityDubai,
+    'latitude': 25.0805,
+    'longitude': 55.1403,
+    'partnerId': MockIds.partnerDesertDrive,
+  },
+  {
+    'id': MockIds.locDubaiAirport,
+    'name': 'DXB Terminal 3 desk',
+    'address': 'Arrivals hall, Terminal 3, Dubai International Airport',
+    'cityId': MockIds.cityDubai,
+    'latitude': 25.2532,
+    'longitude': 55.3657,
+    'partnerId': MockIds.partnerDesertDrive,
+  },
+  {
+    'id': MockIds.locMumbaiBkc,
+    'name': 'Bandra Kurla Complex',
+    'address': 'G Block, BKC, Bandra East, Mumbai',
+    'cityId': MockIds.cityMumbai,
+    'latitude': 19.0657,
+    'longitude': 72.8686,
+    'partnerId': MockIds.partnerMumbaiMotors,
+  },
+  {
+    'id': MockIds.locMumbaiAirport,
+    'name': 'Mumbai Airport T2',
+    'address': 'Chhatrapati Shivaji Maharaj International Airport, T2',
+    'cityId': MockIds.cityMumbai,
+    'latitude': 19.0896,
+    'longitude': 72.8656,
+    'partnerId': MockIds.partnerMumbaiMotors,
+  },
+];
+
+/// Internal vehicle records (the `vehicles` table, camelCased). The mock
+/// server turns these into `VehicleSummary` / `VehicleDetail` JSON.
+final List<Map<String, dynamic>> mockVehicles = [
+  _vehicle(
+    id: 'c1d6b6a3-5c0a-4fa6-af53-6c7b8a9fad01',
+    partnerId: MockIds.partnerDesertDrive,
+    cityId: MockIds.cityDubai,
+    locationId: MockIds.locDubaiMarina,
+    make: 'Toyota',
+    model: 'Corolla',
+    year: 2024,
+    category: 'economy',
+    seats: 5,
+    luggage: 2,
+    color: 'White',
+    dailyRateMinor: 15000,
+    depositMinor: 100000,
+    cancellation: 'flexible',
+    delivery: true,
+    deliveryFeeMinor: 5000,
+    featured: true,
+    mileage: 250,
+    excessMinor: 100,
+  ),
+  _vehicle(
+    id: 'c1d6b6a3-5c0a-4fa6-af53-6c7b8a9fad02',
+    partnerId: MockIds.partnerDesertDrive,
+    cityId: MockIds.cityDubai,
+    locationId: MockIds.locDubaiAirport,
+    make: 'Nissan',
+    model: 'Patrol',
+    year: 2023,
+    category: 'suv',
+    seats: 7,
+    luggage: 4,
+    color: 'Black',
+    dailyRateMinor: 45000,
+    depositMinor: 300000,
+    cancellation: 'moderate',
+    delivery: true,
+    deliveryFeeMinor: 7500,
+    featured: true,
+    mileage: 300,
+    excessMinor: 150,
+    fuelType: 'petrol',
+    weeklyDiscountBps: 1000,
+    bookingMode: 'instant',
+  ),
+  _vehicle(
+    id: 'c1d6b6a3-5c0a-4fa6-af53-6c7b8a9fad03',
+    partnerId: MockIds.partnerDesertDrive,
+    cityId: MockIds.cityDubai,
+    locationId: MockIds.locDubaiMarina,
+    make: 'Mercedes-Benz',
+    model: 'E-Class',
+    year: 2024,
+    category: 'luxury',
+    seats: 5,
+    luggage: 3,
+    color: 'Silver',
+    dailyRateMinor: 90000,
+    depositMinor: 500000,
+    cancellation: 'strict',
+    delivery: true,
+    deliveryFeeMinor: 0,
+    featured: true,
+    mileage: 200,
+    excessMinor: 300,
+    minRentalDays: 2,
+  ),
+  _vehicle(
+    id: 'c1d6b6a3-5c0a-4fa6-af53-6c7b8a9fad04',
+    partnerId: MockIds.partnerDesertDrive,
+    cityId: MockIds.cityDubai,
+    locationId: MockIds.locDubaiAirport,
+    make: 'Tesla',
+    model: 'Model 3',
+    year: 2024,
+    category: 'electric',
+    seats: 5,
+    luggage: 2,
+    color: 'Blue',
+    dailyRateMinor: 40000,
+    depositMinor: 200000,
+    cancellation: 'flexible',
+    delivery: false,
+    deliveryFeeMinor: 0,
+    mileage: null,
+    excessMinor: 0,
+    fuelType: 'electric',
+    bookingMode: 'instant',
+  ),
+  _vehicle(
+    id: 'c1d6b6a3-5c0a-4fa6-af53-6c7b8a9fad05',
+    partnerId: MockIds.partnerDesertDrive,
+    cityId: MockIds.cityAbuDhabi,
+    locationId: null,
+    make: 'Honda',
+    model: 'Accord',
+    year: 2022,
+    category: 'sedan',
+    seats: 5,
+    luggage: 3,
+    color: 'Grey',
+    dailyRateMinor: 22000,
+    depositMinor: 150000,
+    cancellation: 'moderate',
+    delivery: true,
+    deliveryFeeMinor: 6000,
+    mileage: 250,
+    excessMinor: 100,
+    transmission: 'automatic',
+  ),
+  _vehicle(
+    id: 'c1d6b6a3-5c0a-4fa6-af53-6c7b8a9fad06',
+    partnerId: MockIds.partnerDesertDrive,
+    cityId: MockIds.cityDubai,
+    locationId: MockIds.locDubaiMarina,
+    make: 'Kia',
+    model: 'Picanto',
+    year: 2023,
+    category: 'economy',
+    seats: 4,
+    luggage: 1,
+    color: 'Red',
+    dailyRateMinor: 9900,
+    depositMinor: 75000,
+    cancellation: 'flexible',
+    delivery: false,
+    deliveryFeeMinor: 0,
+    mileage: 200,
+    excessMinor: 75,
+    transmission: 'manual',
+  ),
+  _vehicle(
+    id: 'd2e7c7b4-6d1b-40b7-b064-7d8c9bab0e01',
+    partnerId: MockIds.partnerMumbaiMotors,
+    cityId: MockIds.cityMumbai,
+    locationId: MockIds.locMumbaiBkc,
+    make: 'Maruti Suzuki',
+    model: 'Swift',
+    year: 2024,
+    category: 'economy',
+    seats: 5,
+    luggage: 2,
+    color: 'Red',
+    dailyRateMinor: 220000,
+    depositMinor: 1000000,
+    cancellation: 'flexible',
+    delivery: true,
+    deliveryFeeMinor: 50000,
+    featured: true,
+    mileage: 250,
+    excessMinor: 1200,
+    transmission: 'manual',
+  ),
+  _vehicle(
+    id: 'd2e7c7b4-6d1b-40b7-b064-7d8c9bab0e02',
+    partnerId: MockIds.partnerMumbaiMotors,
+    cityId: MockIds.cityMumbai,
+    locationId: MockIds.locMumbaiAirport,
+    make: 'Mahindra',
+    model: 'XUV700',
+    year: 2023,
+    category: 'suv',
+    seats: 7,
+    luggage: 4,
+    color: 'White',
+    dailyRateMinor: 450000,
+    depositMinor: 2500000,
+    cancellation: 'moderate',
+    delivery: true,
+    deliveryFeeMinor: 75000,
+    featured: true,
+    mileage: 300,
+    excessMinor: 1500,
+    fuelType: 'diesel',
+    weeklyDiscountBps: 1000,
+    bookingMode: 'instant',
+  ),
+  _vehicle(
+    id: 'd2e7c7b4-6d1b-40b7-b064-7d8c9bab0e03',
+    partnerId: MockIds.partnerMumbaiMotors,
+    cityId: MockIds.cityMumbai,
+    locationId: MockIds.locMumbaiBkc,
+    make: 'Honda',
+    model: 'City',
+    year: 2023,
+    category: 'sedan',
+    seats: 5,
+    luggage: 3,
+    color: 'Silver',
+    dailyRateMinor: 320000,
+    depositMinor: 1500000,
+    cancellation: 'strict',
+    delivery: false,
+    deliveryFeeMinor: 0,
+    mileage: 250,
+    excessMinor: 1200,
+  ),
+  _vehicle(
+    id: 'd2e7c7b4-6d1b-40b7-b064-7d8c9bab0e04',
+    partnerId: MockIds.partnerMumbaiMotors,
+    cityId: MockIds.cityMumbai,
+    locationId: MockIds.locMumbaiAirport,
+    make: 'Tata',
+    model: 'Nexon EV',
+    year: 2024,
+    category: 'electric',
+    seats: 5,
+    luggage: 2,
+    color: 'Teal',
+    dailyRateMinor: 350000,
+    depositMinor: 1500000,
+    cancellation: 'flexible',
+    delivery: true,
+    deliveryFeeMinor: 50000,
+    mileage: null,
+    excessMinor: 0,
+    fuelType: 'electric',
+  ),
+  _vehicle(
+    id: 'd2e7c7b4-6d1b-40b7-b064-7d8c9bab0e05',
+    partnerId: MockIds.partnerMumbaiMotors,
+    cityId: MockIds.cityGoa,
+    locationId: null,
+    make: 'BMW',
+    model: '3 Series',
+    year: 2022,
+    category: 'luxury',
+    seats: 5,
+    luggage: 3,
+    color: 'Black',
+    dailyRateMinor: 1200000,
+    depositMinor: 5000000,
+    cancellation: 'strict',
+    delivery: true,
+    deliveryFeeMinor: 100000,
+    mileage: 200,
+    excessMinor: 2500,
+    minRentalDays: 2,
+  ),
+];
+
+Map<String, dynamic> _vehicle({
+  required String id,
+  required String partnerId,
+  required String cityId,
+  required String? locationId,
+  required String make,
+  required String model,
+  required int year,
+  required String category,
+  required int seats,
+  required int luggage,
+  required String color,
+  required int dailyRateMinor,
+  required int depositMinor,
+  required String cancellation,
+  required bool delivery,
+  required int deliveryFeeMinor,
+  required int? mileage,
+  required int excessMinor,
+  bool featured = false,
+  String transmission = 'automatic',
+  String fuelType = 'petrol',
+  int weeklyDiscountBps = 0,
+  int minRentalDays = 1,
+  String bookingMode = 'request',
+}) => {
+  'id': id,
+  'partnerId': partnerId,
+  'cityId': cityId,
+  'pickupLocationId': locationId,
+  'make': make,
+  'model': model,
+  'year': year,
+  'category': category,
+  'transmission': transmission,
+  'fuelType': fuelType,
+  'seats': seats,
+  'doors': seats > 5 ? 5 : 4,
+  'luggage': luggage,
+  'color': color,
+  'description':
+      'A well-kept $year $make $model, cleaned and inspected before every '
+      'rental.',
+  'features': [
+    'Bluetooth',
+    'Reversing camera',
+    'Apple CarPlay',
+    'Cruise control',
+  ],
+  'dailyRateMinor': dailyRateMinor,
+  'weeklyDiscountBps': weeklyDiscountBps,
+  'mileageLimitKmPerDay': mileage,
+  'excessMileageFeeMinor': excessMinor,
+  'fuelPolicy': fuelType == 'electric' ? 'same_to_same' : 'full_to_full',
+  'depositMinor': depositMinor,
+  'cancellationPolicy': cancellation,
+  'deliveryAvailable': delivery,
+  'deliveryFeeMinor': deliveryFeeMinor,
+  'minRentalDays': minRentalDays,
+  'bufferHours': 2,
+  'insuranceInfo':
+      'Comprehensive insurance included. Excess of up to the deposit amount '
+      'applies to damage claims.',
+  'isFeatured': featured,
+  'bookingMode': bookingMode,
+  'imageUrls': <String>[],
+};
+
+/// Mock accounts. Passwords are not checked beyond being non-empty: mock mode
+/// never talks to Supabase.
+final Map<String, Map<String, dynamic>> mockUsers = {
+  'customer@rove.test': {
+    'id': MockIds.userAe,
+    'email': 'customer@rove.test',
+    'profile': {
+      'fullName': 'Aisha Rahman',
+      'phone': '+971501234567',
+      'countryCode': 'AE',
+      'cityId': MockIds.cityDubai,
+      'preferredLanguage': 'en',
+      'notificationPrefs': {'email': true, 'push': true, 'marketing': false},
+      'verificationStatus': 'submitted',
+      'deletionRequestedAt': null,
+    },
+  },
+  'customer.in@rove.test': {
+    'id': MockIds.userIn,
+    'email': 'customer.in@rove.test',
+    'profile': {
+      'fullName': 'Rohan Mehta',
+      'phone': '+919812345678',
+      'countryCode': 'IN',
+      'cityId': MockIds.cityMumbai,
+      'preferredLanguage': 'en',
+      'notificationPrefs': {'email': true, 'push': true, 'marketing': false},
+      'verificationStatus': 'not_started',
+      'deletionRequestedAt': null,
+    },
+  },
+  'google.user@rove.test': {
+    'id': MockIds.userGoogle,
+    'email': 'google.user@rove.test',
+    'profile': {
+      'fullName': null,
+      'phone': null,
+      'countryCode': null,
+      'cityId': null,
+      'preferredLanguage': 'en',
+      'notificationPrefs': {'email': true, 'push': true, 'marketing': false},
+      'verificationStatus': 'not_started',
+      'deletionRequestedAt': null,
+    },
+  },
+};
+
+final Map<String, List<Map<String, dynamic>>> mockDocumentRequirements = {
+  'AE': [
+    {
+      'documentType': 'driving_licence',
+      'label': 'Driving licence',
+      'isRequired': true,
+    },
+    {
+      'documentType': 'passport_or_emirates_id',
+      'label': 'Passport or Emirates ID',
+      'isRequired': true,
+    },
+  ],
+  'IN': [
+    {
+      'documentType': 'driving_licence',
+      'label': 'Driving licence',
+      'isRequired': true,
+    },
+  ],
+};
+
+const mockPickupInstructions =
+    'Bring your driving licence and the ID you uploaded. Our team will walk '
+    'around the car with you and record its condition before handing over '
+    'the keys.';
+
+const mockReturnInstructions =
+    'Return the car to the same location at the agreed time with the fuel '
+    'level matching the fuel policy. The return inspection is recorded with '
+    'you present.';

@@ -1,0 +1,4 @@
+{
+  "API_MODE": "mock",
+  "ENABLE_DEV_EMAIL_LOGIN": "true"
+}

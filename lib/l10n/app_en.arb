@@ -1,0 +1,781 @@
+{
+  "@@locale": "en",
+  "appName": "Rove",
+  "retry": "Try again",
+  "cancel": "Cancel",
+  "continueLabel": "Continue",
+  "save": "Save",
+  "done": "Done",
+  "close": "Close",
+  "edit": "Edit",
+  "apply": "Apply",
+  "reset": "Reset",
+  "change": "Change",
+  "confirm": "Confirm",
+  "ok": "OK",
+  "undo": "Undo",
+  "seeAll": "See all",
+  "loadingLabel": "Loading",
+  "notSet": "Not set",
+  "navExplore": "Explore",
+  "navBookings": "Bookings",
+  "navSaved": "Saved",
+  "navProfile": "Profile",
+  "errorNetwork": "You're offline. Check your connection and try again.",
+  "errorTimeout": "This is taking too long. Please try again.",
+  "errorServer": "Something went wrong on our side. Please try again shortly.",
+  "errorUnknown": "Something went wrong. Please try again.",
+  "errorRateLimited": "Too many requests. Please wait a moment and try again.",
+  "errorSessionExpired": "Your session expired. Please sign in again.",
+  "errorNotFound": "We couldn't find that.",
+  "errorForbidden": "You don't have access to this.",
+  "errorUnauthenticated": "Please sign in to continue.",
+  "errorVehicleUnavailable": "This car is no longer available for your dates.",
+  "errorQuoteExpired": "Your price expired. Review the updated price to continue.",
+  "errorHoldExpired": "Your booking hold expired. Please start again.",
+  "errorPaymentFailed": "Your payment didn't go through. No money was taken.",
+  "errorValidation": "Some details need your attention.",
+  "errorInvalidState": "This booking has changed. Refresh to see its current status.",
+  "errorFileTooLarge": "This file is too large.",
+  "errorUnsupportedFile": "Upload a PDF, JPEG or PNG file.",
+  "errorConflict": "This conflicts with a recent change. Refresh and try again.",
+  "fieldRequired": "Required",
+  "fieldTooShort": "Too short",
+  "fieldTooLong": "Too long",
+  "fieldInvalidPhone": "Enter a phone number with country code",
+  "fieldInvalidEmail": "Enter a valid email address",
+  "fieldInvalidDate": "Enter a valid date",
+  "fieldUnderage": "Drivers must be at least {age} years old",
+  "@fieldUnderage": {
+    "placeholders": {
+      "age": {
+        "type": "int"
+      }
+    }
+  },
+  "periodMissing": "Choose pickup and return times",
+  "periodPickupTooSoon": "Pickup must be at least 2 hours from now",
+  "periodReturnBeforePickup": "Return must be after pickup",
+  "periodTooShort": "Rentals are at least 24 hours",
+  "periodTooLong": "Rentals can be up to 30 days",
+  "periodTooFarAhead": "Pickup must be within the next 180 days",
+  "welcomeTitle": "Rent a car you can trust",
+  "welcomeBody": "Compare verified rental companies in India and the UAE. The full price is shown before you book.",
+  "welcomeGetStarted": "Get started",
+  "countryTitle": "Where are you renting?",
+  "countryBody": "Prices, taxes and payment options follow this country. You can change it later.",
+  "countryLoadError": "We couldn't load countries.",
+  "signInTitle": "Sign in",
+  "signInBody": "Signing in with Google doesn't verify your identity or licence. We'll ask for those before your first booking.",
+  "signInGoogle": "Continue with Google",
+  "signInDevSection": "Development sign-in",
+  "emailLabel": "Email",
+  "passwordLabel": "Password",
+  "signInWithEmail": "Sign in with email",
+  "signInCancelled": "Sign-in was cancelled.",
+  "signInFailed": "We couldn't sign you in. Please try again.",
+  "signInInvalidCredentials": "Email or password is incorrect.",
+  "signInLaunchFailed": "We couldn't open Google sign-in.",
+  "signInCallbackFailed": "Google sign-in didn't complete.",
+  "signInCompleting": "Completing sign-in",
+  "signInWaiting": "Finish signing in with Google, then come back here.",
+  "signInLegal": "By continuing you agree to Rove's terms and privacy policy.",
+  "completeProfileTitle": "A few details",
+  "completeProfileBody": "Rental companies use these to reach you about your bookings.",
+  "fullNameLabel": "Full name",
+  "phoneLabel": "Phone number",
+  "phoneHelper": "Include the country code, e.g. {example}",
+  "@phoneHelper": {
+    "placeholders": {
+      "example": {
+        "type": "String"
+      }
+    }
+  },
+  "countryLabel": "Country",
+  "cityLabel": "City",
+  "homeTitle": "Find a car",
+  "homeGreeting": "Hi {name}",
+  "@homeGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "pickupCityLabel": "Pickup city",
+  "selectCity": "Select a city",
+  "pickupLabel": "Pickup",
+  "returnLabel": "Return",
+  "searchCars": "Search cars",
+  "useMyLocation": "Use my location",
+  "locationDenied": "Location access is off. Choose a city instead.",
+  "locationUnavailable": "We couldn't find a city near you. Choose one instead.",
+  "nearestCityFound": "Showing cars near {city}",
+  "@nearestCityFound": {
+    "placeholders": {
+      "city": {
+        "type": "String"
+      }
+    }
+  },
+  "categoriesTitle": "Browse by type",
+  "featuredTitle": "Featured",
+  "recentlyViewedTitle": "Recently viewed",
+  "savedCarsTitle": "Saved",
+  "trustTitle": "Why Rove",
+  "trustPricingTitle": "The full price, upfront",
+  "trustPricingBody": "Taxes and fees are included before you book. Deposits are shown separately and are refundable.",
+  "trustPartnersTitle": "Verified rental companies",
+  "trustPartnersBody": "Every rental company is reviewed before it can list cars on Rove.",
+  "featuredEmpty": "No featured cars in this city yet.",
+  "categoryEconomy": "Economy",
+  "categorySuv": "SUV",
+  "categorySedan": "Sedan",
+  "categoryLuxury": "Luxury",
+  "categoryElectric": "Electric",
+  "categoryOther": "Other",
+  "transmissionAutomatic": "Automatic",
+  "transmissionManual": "Manual",
+  "fuelPetrol": "Petrol",
+  "fuelDiesel": "Diesel",
+  "fuelHybrid": "Hybrid",
+  "fuelElectric": "Electric",
+  "seatsCount": "{count, plural, =1{1 seat} other{{count} seats}}",
+  "@seatsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bagsCount": "{count, plural, =1{1 bag} other{{count} bags}}",
+  "@bagsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "doorsCount": "{count, plural, =1{1 door} other{{count} doors}}",
+  "@doorsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "daysCount": "{count, plural, =1{1 day} other{{count} days}}",
+  "@daysCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "perDay": "/day",
+  "priceTotalForDays": "{amount} total · {days, plural, =1{1 day} other{{days} days}}",
+  "@priceTotalForDays": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "deliveryPill": "Delivery",
+  "anyOption": "Any",
+  "searchResultsCount": "{count, plural, =0{No cars} =1{1 car} other{{count} cars}}",
+  "@searchResultsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sortLabel": "Sort",
+  "sortRelevance": "Recommended",
+  "sortPriceAsc": "Price: low to high",
+  "sortPriceDesc": "Price: high to low",
+  "sortCategory": "Vehicle type",
+  "filtersTitle": "Filters",
+  "filtersWithCount": "Filters ({count})",
+  "@filtersWithCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "showResults": "Show results",
+  "filterCategory": "Vehicle type",
+  "filterTransmission": "Transmission",
+  "filterSeats": "Seats",
+  "filterSeatsAtLeast": "{count}+",
+  "@filterSeatsAtLeast": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "filterBudget": "Max daily price ({currency})",
+  "@filterBudget": {
+    "placeholders": {
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "filterBudgetHint": "No limit",
+  "filterBudgetInvalid": "Enter an amount, e.g. 250",
+  "filterDelivery": "Delivery available",
+  "filterFuel": "Fuel",
+  "searchEmpty": "No cars available for these dates.",
+  "searchEmptyFiltered": "No cars match these filters.",
+  "changeSearch": "Change search",
+  "clearFilters": "Clear filters",
+  "loadMoreFailed": "Couldn't load more cars.",
+  "searchAvailabilityNote": "Only cars available for your full trip are shown.",
+  "datesTitle": "Dates",
+  "datesTimezoneNote": "Times are local to {city} ({zone}).",
+  "@datesTimezoneNote": {
+    "placeholders": {
+      "city": {
+        "type": "String"
+      },
+      "zone": {
+        "type": "String"
+      }
+    }
+  },
+  "datesApply": "Apply",
+  "pickDate": "Date",
+  "pickTime": "Time",
+  "detailsSpecs": "Details",
+  "detailsFeatures": "Features",
+  "dailyRate": "Daily rate",
+  "specDoors": "Doors",
+  "specLuggage": "Luggage",
+  "specMinRental": "Minimum rental",
+  "specColor": "Colour",
+  "detailsPartner": "Rental company",
+  "partnerVerified": "Verified rental company",
+  "partnerUnverified": "Not yet verified",
+  "detailsPickupDelivery": "Pickup and delivery",
+  "detailsPickupAt": "Pickup at {name}",
+  "@detailsPickupAt": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "detailsPickupArranged": "Pickup point shared after booking",
+  "detailsDeliveryFee": "Delivery available · {fee}",
+  "@detailsDeliveryFee": {
+    "placeholders": {
+      "fee": {
+        "type": "String"
+      }
+    }
+  },
+  "detailsDeliveryFree": "Free delivery available",
+  "detailsNoDelivery": "No delivery for this car",
+  "detailsMileage": "Mileage",
+  "mileageUnlimited": "Unlimited mileage",
+  "mileageLimit": "{km} km per day included",
+  "@mileageLimit": {
+    "placeholders": {
+      "km": {
+        "type": "int"
+      }
+    }
+  },
+  "mileageExcess": "{fee} per extra km",
+  "@mileageExcess": {
+    "placeholders": {
+      "fee": {
+        "type": "String"
+      }
+    }
+  },
+  "detailsFuelPolicy": "Fuel policy",
+  "fuelFullToFull": "Full to full: return with a full tank",
+  "fuelSameToSame": "Same to same: return at the pickup level",
+  "detailsDeposit": "Refundable deposit",
+  "depositBody": "Held at pickup and released after the return inspection. Not part of the rental price.",
+  "detailsCancellation": "Cancellation",
+  "detailsInsurance": "Insurance and protection",
+  "insuranceMissing": "Ask the rental company about protection before booking.",
+  "detailsEstimate": "Estimated total",
+  "estimateIncludes": "Includes taxes and fees · {days, plural, =1{1 day} other{{days} days}}",
+  "@estimateIncludes": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "estimateNoDates": "Choose dates to see the total",
+  "detailsBook": "Book",
+  "detailsChooseDates": "Choose dates",
+  "detailsUnavailable": "Not available for these dates",
+  "detailsMinDays": "Minimum rental: {count, plural, =1{1 day} other{{count} days}}",
+  "@detailsMinDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bookingModeInstant": "Instant confirmation",
+  "bookingModeRequest": "Request to book: the rental company confirms within 24 hours",
+  "chargesRental": "Rental charges",
+  "chargesConditional": "Only if they apply",
+  "saveVehicle": "Save",
+  "unsaveVehicle": "Remove from saved",
+  "favoriteFailed": "Couldn't update saved cars.",
+  "vehicleImageLabel": "Photo of {vehicle}",
+  "@vehicleImageLabel": {
+    "placeholders": {
+      "vehicle": {
+        "type": "String"
+      }
+    }
+  },
+  "vehiclePhotoCount": "{index} of {count}",
+  "@vehiclePhotoCount": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "checkoutTitle": "Checkout",
+  "stepTrip": "Trip",
+  "stepDriver": "Driver",
+  "stepVerification": "Licence",
+  "stepReview": "Review",
+  "stepOf": "Step {current} of {total}",
+  "@stepOf": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "tripTitle": "Your trip",
+  "pickupLocationLabel": "Pickup location",
+  "deliverToMe": "Deliver to an address",
+  "deliveryAddressLabel": "Delivery address",
+  "deliveryAddressHint": "Building, street, area",
+  "deliveryFeeNote": "Delivery fee: {fee}",
+  "@deliveryFeeNote": {
+    "placeholders": {
+      "fee": {
+        "type": "String"
+      }
+    }
+  },
+  "driverTitle": "Driver details",
+  "dateOfBirthLabel": "Date of birth",
+  "dateOfBirthHint": "Select date",
+  "driverAgeNote": "The driver must be 21 or older and bring their licence and ID to pickup.",
+  "verificationTitle": "Licence and ID",
+  "verificationBody": "The rental company checks these at pickup. Files go securely to Rove and aren't kept on your phone.",
+  "docMissing": "Not uploaded",
+  "docSubmitted": "Submitted",
+  "docApproved": "Approved",
+  "docRejected": "Rejected",
+  "docExpired": "Expired",
+  "docRejectedReason": "Rejected: {reason}",
+  "@docRejectedReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "uploadDocument": "Upload",
+  "replaceDocument": "Replace",
+  "uploadChoosePhoto": "Choose a photo",
+  "uploadTakePhoto": "Take a photo",
+  "uploadChoosePdf": "Choose a PDF",
+  "uploading": "Uploading",
+  "verificationReady": "Documents submitted. You can continue.",
+  "reviewTitle": "Review and pay",
+  "priceDetails": "Price details",
+  "priceTotal": "Total",
+  "priceDepositNote": "Held at pickup, not charged now",
+  "priceConditionalTitle": "Possible extra charges",
+  "perKmUnit": "per km",
+  "quoteHeldUntil": "Price held until {time}",
+  "@quoteHeldUntil": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "quoteExpired": "This price expired.",
+  "refreshPrice": "Refresh price",
+  "gettingPrice": "Getting your price",
+  "termsAccept": "I accept the rental terms, the cancellation policy and the Rove terms of service.",
+  "readTerms": "Read the terms",
+  "termsRequired": "Accept the terms to continue.",
+  "bookAndPay": "Book and pay {amount}",
+  "@bookAndPay": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "requestAndAuthorize": "Request booking · {amount}",
+  "@requestAndAuthorize": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "requestModeNote": "Your payment is authorised now and only charged if the rental company accepts.",
+  "instantModeNote": "Your booking is confirmed as soon as the payment succeeds.",
+  "paymentTitle": "Payment",
+  "paymentAmountDue": "Amount due",
+  "paymentMethodLabel": "Payment method",
+  "paymentMethodCard": "Card",
+  "paymentMethodUpi": "UPI",
+  "paymentMethodApplePay": "Apple Pay",
+  "paymentTestMode": "Test mode: no real payment is taken.",
+  "paymentSimulateDecline": "Simulate a declined payment",
+  "paymentPay": "Pay {amount}",
+  "@paymentPay": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentAuthorize": "Authorise {amount}",
+  "@paymentAuthorize": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentProcessing": "Processing payment",
+  "resultConfirmedTitle": "Booking confirmed",
+  "resultConfirmedBody": "{partner} has confirmed your booking.",
+  "@resultConfirmedBody": {
+    "placeholders": {
+      "partner": {
+        "type": "String"
+      }
+    }
+  },
+  "resultPendingTitle": "Request sent",
+  "resultPendingBody": "{partner} will respond by {time}. Your payment is authorised, not charged.",
+  "@resultPendingBody": {
+    "placeholders": {
+      "partner": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "resultHeldTitle": "Payment not completed",
+  "resultHeldBody": "The car is held for you until {time}.",
+  "@resultHeldBody": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "resultDeclinedTitle": "Payment declined",
+  "resultDeclinedBody": "No money was taken. The car is held until {time}.",
+  "@resultDeclinedBody": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "resultExpiredTitle": "Hold expired",
+  "resultExpiredBody": "The car was released. Start a new booking to try again.",
+  "resultRejectedTitle": "Request declined",
+  "resultRejectedBody": "The rental company declined this request. Any authorisation has been released.",
+  "resultUnavailableTitle": "No longer available",
+  "resultUnavailableBody": "This car was booked for your dates. Try different dates or another car.",
+  "resultCancelledTitle": "Booking cancelled",
+  "resultUnknownTitle": "We couldn't confirm the result",
+  "resultUnknownBody": "Check Bookings for the latest status. You won't be charged twice.",
+  "referenceLabel": "Reference",
+  "viewBooking": "View booking",
+  "backToExplore": "Back to explore",
+  "retryPayment": "Try payment again",
+  "chooseOtherDates": "Choose other dates",
+  "checkStatus": "Check status",
+  "bookingsTitle": "Bookings",
+  "tabUpcoming": "Upcoming",
+  "tabPending": "Pending",
+  "tabActive": "Active",
+  "tabCompleted": "Completed",
+  "tabCancelled": "Cancelled",
+  "bookingsEmptyUpcoming": "No upcoming trips.",
+  "bookingsEmptyPending": "No pending requests.",
+  "bookingsEmptyActive": "No active rentals.",
+  "bookingsEmptyCompleted": "No completed rentals yet.",
+  "bookingsEmptyCancelled": "No cancelled bookings.",
+  "findACar": "Find a car",
+  "statusHeld": "Awaiting payment",
+  "statusPendingPartner": "Awaiting confirmation",
+  "statusConfirmed": "Confirmed",
+  "statusActive": "In progress",
+  "statusCompleted": "Completed",
+  "statusRejected": "Declined",
+  "statusCancelled": "Cancelled",
+  "statusExpired": "Expired",
+  "statusUnknown": "Updating",
+  "paymentUnpaid": "Not paid",
+  "paymentAuthorized": "Authorised",
+  "paymentCaptured": "Paid",
+  "paymentPartiallyRefunded": "Partially refunded",
+  "paymentRefunded": "Refunded",
+  "paymentFailedStatus": "Failed",
+  "paymentVoided": "Authorisation released",
+  "depositNotHeld": "Not held",
+  "depositHeld": "Held",
+  "depositReleased": "Released",
+  "depositPartiallyReleased": "Partially released",
+  "bookingTitle": "Booking",
+  "bookingWhen": "When",
+  "bookingWhere": "Where",
+  "bookingDeliveryTo": "Delivered to {address}",
+  "@bookingDeliveryTo": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "bookingPaymentSection": "Payment",
+  "bookingPaymentStatus": "Payment",
+  "bookingDepositStatus": "Deposit",
+  "bookingCancellationFee": "Cancellation fee",
+  "bookingRefundAmount": "Refund",
+  "bookingRefundPending": "Refunds show as completed once the payment provider confirms them.",
+  "bookingConditions": "Rental conditions",
+  "bookingDriver": "Driver",
+  "bookingPickupReturn": "Pickup and return",
+  "bookingPickupGuide": "Pickup",
+  "bookingReturnGuide": "Return",
+  "bookingReceipt": "Receipt",
+  "bookingGetHelp": "Get help",
+  "bookingCancel": "Cancel booking",
+  "bookingCompletePayment": "Complete payment",
+  "bookingPayBy": "Complete payment by {time} to keep this booking.",
+  "@bookingPayBy": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "bookingPartnerDue": "{partner} responds by {time}.",
+  "@bookingPartnerDue": {
+    "placeholders": {
+      "partner": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "bookingHistory": "History",
+  "bookingPartner": "Rental company",
+  "cancelDialogTitle": "Cancel this booking?",
+  "cancelFreePaid": "Free cancellation. {refund} will be refunded.",
+  "@cancelFreePaid": {
+    "placeholders": {
+      "refund": {
+        "type": "String"
+      }
+    }
+  },
+  "cancelFreeUnpaid": "Free cancellation. You haven't been charged.",
+  "cancelWithFee": "A cancellation fee of {fee} applies. {refund} will be refunded.",
+  "@cancelWithFee": {
+    "placeholders": {
+      "fee": {
+        "type": "String"
+      },
+      "refund": {
+        "type": "String"
+      }
+    }
+  },
+  "cancelReasonLabel": "Reason (optional)",
+  "cancelConfirm": "Cancel booking",
+  "cancelKeep": "Keep booking",
+  "cancelDone": "Booking cancelled.",
+  "cancelChecking": "Checking cancellation terms",
+  "pickupTitle": "Pickup",
+  "returnTitle": "Return",
+  "receiptTitle": "Receipt",
+  "instructionsTitle": "Instructions",
+  "bringDocuments": "Bring with you",
+  "inspectionTitle": "Vehicle inspection",
+  "inspectionPendingPickup": "The rental company records the car’s condition with you at pickup.",
+  "inspectionPendingReturn": "The rental company records the car’s condition with you at return.",
+  "inspectionRecorded": "Recorded {time}",
+  "@inspectionRecorded": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "odometerLabel": "Odometer",
+  "odometerValue": "{km} km",
+  "@odometerValue": {
+    "placeholders": {
+      "km": {
+        "type": "int"
+      }
+    }
+  },
+  "fuelLevelLabel": "Fuel level",
+  "fuelLevelValue": "{pct}%",
+  "@fuelLevelValue": {
+    "placeholders": {
+      "pct": {
+        "type": "int"
+      }
+    }
+  },
+  "damagesNone": "No damage noted",
+  "damagesNoted": "{count, plural, =1{1 mark noted} other{{count} marks noted}}",
+  "@damagesNoted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "photosRecorded": "{count, plural, =0{No photos} =1{1 photo} other{{count} photos}}",
+  "@photosRecorded": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "photosLabel": "Photos",
+  "pickupConfirmedAt": "Picked up {time}",
+  "@pickupConfirmedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "returnConfirmedAt": "Returned {time}",
+  "@returnConfirmedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "pickupNotYet": "Not picked up yet",
+  "returnNotYet": "Not returned yet",
+  "receiptCharged": "Total charged",
+  "receiptAuthorized": "Total authorised",
+  "receiptOutstanding": "Outstanding charges",
+  "receiptNoOutstanding": "None",
+  "receiptOutstandingSupport": "Questions about extra charges? Contact support.",
+  "savedTitle": "Saved",
+  "savedEmpty": "Cars you save appear here.",
+  "browseCars": "Browse cars",
+  "savedRemoved": "Removed from saved",
+  "profileTitle": "Profile",
+  "profileEdit": "Edit profile",
+  "profileVerification": "Licence and ID",
+  "profileBookingHistory": "Booking history",
+  "profileSettings": "Settings",
+  "profileSupport": "Help and support",
+  "profilePrivacy": "Privacy policy",
+  "profileTerms": "Terms of service",
+  "profileSignOut": "Sign out",
+  "signOutConfirm": "Sign out of Rove?",
+  "deleteAccount": "Request account deletion",
+  "deleteAccountTitle": "Delete your account?",
+  "deleteAccountBody": "We'll delete your account and personal data once any open bookings are settled. Records we must keep by law are retained.",
+  "deleteAccountConfirm": "Request deletion",
+  "deletionRequestedOn": "Deletion requested on {date}",
+  "@deletionRequestedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "profileSaved": "Profile updated",
+  "verificationNotStarted": "Not started",
+  "verificationSubmitted": "Under review",
+  "verificationVerified": "Verified",
+  "verificationRejected": "Action needed",
+  "settingsTitle": "Settings",
+  "settingsRegion": "Region",
+  "settingsLanguage": "Language",
+  "settingsNotifications": "Notifications",
+  "notifEmail": "Email",
+  "notifEmailBody": "Confirmations and receipts",
+  "notifPush": "Push notifications",
+  "notifPushBody": "Pickup reminders and status changes",
+  "notifMarketing": "Offers and news",
+  "notifMarketingBody": "Occasional offers from Rove",
+  "languageEnglish": "English",
+  "languageArabic": "العربية",
+  "languageHindi": "हिन्दी",
+  "languageComingSoon": "Coming soon",
+  "settingsSaved": "Settings saved",
+  "supportTitle": "Help and support",
+  "supportNewRequest": "New request",
+  "supportSubject": "Subject",
+  "supportMessage": "How can we help?",
+  "supportSend": "Send",
+  "supportSent": "Request sent. We'll reply by email.",
+  "supportEmpty": "No support requests yet.",
+  "supportAboutBooking": "About booking {reference}",
+  "@supportAboutBooking": {
+    "placeholders": {
+      "reference": {
+        "type": "String"
+      }
+    }
+  },
+  "supportStatusOpen": "Open",
+  "supportStatusInProgress": "In progress",
+  "supportStatusResolved": "Resolved",
+  "supportYourRequests": "Your requests",
+  "privacyTitle": "Privacy policy",
+  "termsTitle": "Terms of service",
+  "privacyBody": "Rove collects only what is needed to run your rentals: your name, email, phone number, country, booking history and the driving licence and ID documents you upload.\n\nDocuments are stored privately and shared only with the rental company handling your booking, through short-lived secure links. Rental companies never see your email address or date of birth.\n\nPayments are handled by our payment provider; Rove never stores your card details.\n\nYou can request deletion of your account from your profile at any time. Some booking records are kept where the law requires it.",
+  "termsBody": "Rove is a marketplace. Your rental agreement is with the rental company shown on your booking.\n\nPrices shown at checkout are calculated by Rove and include taxes and service fees. The refundable deposit is held at pickup and released after the return inspection.\n\nCancellation fees follow the policy shown on the car and on your booking. Refunds are complete only when the payment provider confirms them.\n\nThe driver must be at least 21, hold a valid driving licence and bring the documents uploaded to Rove to pickup."
+}

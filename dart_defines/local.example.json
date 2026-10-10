@@ -1,0 +1,8 @@
+{
+  "API_MODE": "live",
+  "API_BASE_URL": "http://127.0.0.1:4000",
+  "SUPABASE_URL": "http://127.0.0.1:54321",
+  "SUPABASE_ANON_KEY": "<anon key from `npx supabase status` in rove-backend>",
+  "ENABLE_DEV_EMAIL_LOGIN": "true",
+  "OAUTH_REDIRECT_URL": "com.rove.customer://login-callback"
+}
