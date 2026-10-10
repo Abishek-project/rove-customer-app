@@ -1108,6 +1108,12 @@ abstract class AppLocalizations {
   /// **'{km} km per day included'**
   String mileageLimit(int km);
 
+  /// No description provided for @extraKm.
+  ///
+  /// In en, this message translates to:
+  /// **'Extra km'**
+  String get extraKm;
+
   /// No description provided for @mileageExcess.
   ///
   /// In en, this message translates to:

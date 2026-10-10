@@ -31,6 +31,7 @@ Future<PickedDocument?> pickDocument(BuildContext context) async {
   final l10n = context.l10n;
   final source = await showModalBottomSheet<_Source>(
     context: context,
+    useRootNavigator: true,
     builder: (context) => SafeArea(
       child: Column(
         mainAxisSize: MainAxisSize.min,

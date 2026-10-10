@@ -102,15 +102,10 @@ class _CountryPageState extends State<CountryPage> {
                               value: country.code,
                               title: Text(country.name, style: text.titleSmall),
                               subtitle: Text(
-                                country.cities.map((c) => c.name).join(' · '),
+                                '${country.currency} · '
+                                '${country.cities.map((c) => c.name).join(', ')}',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                              ),
-                              secondary: Text(
-                                country.currency,
-                                style: text.labelMedium?.copyWith(
-                                  color: RoveColors.textSecondary,
-                                ),
                               ),
                               controlAffinity: ListTileControlAffinity.trailing,
                             ),

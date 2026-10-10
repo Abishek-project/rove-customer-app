@@ -58,18 +58,48 @@ class TripCubit extends Cubit<TripState> {
   /// the new city's time zone by the default when missing.
   void setCountry(String countryCode, {City? city}) {
     if (countryCode == state.countryCode && city == state.city) return;
+    final previousZone = state.timezone;
     emit(state.copyWith(countryCode: () => countryCode, city: () => city));
+    _keepWallClock(previousZone);
     _ensureDates();
   }
 
   void setCity(City? city) {
+    final previousZone = state.timezone;
     emit(
       state.copyWith(
         city: () => city,
         countryCode: () => city?.countryCode ?? state.countryCode,
       ),
     );
+    _keepWallClock(previousZone);
     _ensureDates();
+  }
+
+  /// Moving to a city in another time zone keeps the chosen wall-clock
+  /// times (10:00 stays 10:00 local) rather than the same instants.
+  void _keepWallClock(String? previousZone) {
+    final zone = state.timezone;
+    if (previousZone == null || zone == null || previousZone == zone) return;
+    DateTime? move(DateTime? utc) {
+      if (utc == null) return null;
+      final local = ZonedTime.inZone(utc, previousZone);
+      return ZonedTime.toUtc(
+        year: local.year,
+        month: local.month,
+        day: local.day,
+        hour: local.hour,
+        minute: local.minute,
+        timezone: zone,
+      );
+    }
+
+    emit(
+      state.copyWith(
+        pickupAt: () => move(state.pickupAt),
+        returnAt: () => move(state.returnAt),
+      ),
+    );
   }
 
   void setDates({required DateTime pickupAt, required DateTime returnAt}) {

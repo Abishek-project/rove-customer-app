@@ -15,6 +15,7 @@ import '../../search/bloc/trip_cubit.dart';
 Future<void> showCitySheet(BuildContext context) {
   return showModalBottomSheet<void>(
     context: context,
+    useRootNavigator: true,
     isScrollControlled: true,
     useSafeArea: true,
     builder: (_) => MultiBlocProvider(

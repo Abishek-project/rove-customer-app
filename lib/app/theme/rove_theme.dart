@@ -97,7 +97,7 @@ abstract final class RoveTheme {
         style: TextButton.styleFrom(
           foregroundColor: RoveColors.primary,
           minimumSize: const Size(48, 44),
-          textStyle: text.labelLarge,
+          textStyle: text.labelMedium,
           shape: RoundedRectangleBorder(borderRadius: RoveRadius.smallAll),
         ),
       ),
@@ -185,6 +185,21 @@ abstract final class RoveTheme {
         ),
         titleTextStyle: text.titleMedium,
         contentTextStyle: text.bodyMedium,
+      ),
+      datePickerTheme: DatePickerThemeData(
+        backgroundColor: RoveColors.surface,
+        surfaceTintColor: Colors.transparent,
+        headerBackgroundColor: RoveColors.surface,
+        headerForegroundColor: RoveColors.textPrimary,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(RoveRadius.sheet),
+        ),
+      ),
+      timePickerTheme: TimePickerThemeData(
+        backgroundColor: RoveColors.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(RoveRadius.sheet),
+        ),
       ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,

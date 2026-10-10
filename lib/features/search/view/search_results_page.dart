@@ -46,6 +46,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
     final l10n = context.l10n;
     final selected = await showModalBottomSheet<VehicleSort>(
       context: context,
+      useRootNavigator: true,
       builder: (context) => SafeArea(
         child: RadioGroup<VehicleSort>(
           groupValue: current,
@@ -128,14 +129,17 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                         ),
                       ),
                     ),
-                    TextButton.icon(
-                      key: const Key('search-sort'),
-                      onPressed: query == null
-                          ? null
-                          : () => _chooseSort(query.sort),
-                      icon: const Icon(Icons.swap_vert_rounded, size: 18),
-                      label: Text(
-                        l10n.sort(query?.sort ?? VehicleSort.relevance),
+                    Flexible(
+                      child: TextButton.icon(
+                        key: const Key('search-sort'),
+                        onPressed: query == null
+                            ? null
+                            : () => _chooseSort(query.sort),
+                        icon: const Icon(Icons.swap_vert_rounded, size: 18),
+                        label: Text(
+                          l10n.sort(query?.sort ?? VehicleSort.relevance),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
                     TextButton.icon(

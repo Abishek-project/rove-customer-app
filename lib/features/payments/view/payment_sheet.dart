@@ -24,6 +24,7 @@ Future<CheckoutResult?> showPaymentSheet(
 }) {
   return showModalBottomSheet<CheckoutResult>(
     context: context,
+    useRootNavigator: true,
     isScrollControlled: true,
     useSafeArea: true,
     isDismissible: false,

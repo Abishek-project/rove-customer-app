@@ -290,10 +290,16 @@ class _TripStep extends StatefulWidget {
 }
 
 class _TripStepState extends State<_TripStep> {
-  late final _address = TextEditingController(
-    text: context.read<CheckoutBloc>().state.deliveryAddress,
-  );
+  late final TextEditingController _address;
   bool _showAddressError = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _address = TextEditingController(
+      text: context.read<CheckoutBloc>().state.deliveryAddress,
+    );
+  }
 
   @override
   void dispose() {

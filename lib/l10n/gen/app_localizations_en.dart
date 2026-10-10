@@ -607,6 +607,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get extraKm => 'Extra km';
+
+  @override
   String mileageExcess(String fee) {
     return '$fee per extra km';
   }

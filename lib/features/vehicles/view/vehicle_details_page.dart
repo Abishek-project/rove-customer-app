@@ -365,7 +365,7 @@ class _PriceSection extends StatelessWidget {
             style: text.labelMedium?.copyWith(color: RoveColors.textSecondary),
           ),
           PriceRow(
-            label: l10n.detailsMileage,
+            label: l10n.extraKm,
             amount: mileage.excessFeePerKm,
             muted: true,
             suffix: l10n.perKmUnit,

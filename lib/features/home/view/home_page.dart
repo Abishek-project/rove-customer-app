@@ -182,17 +182,53 @@ class _SearchPanel extends StatelessWidget {
                 onTap: () => showCitySheet(context),
               ),
               const SizedBox(height: RoveSpacing.md),
-              RoveSelectField(
-                key: const Key('home-dates'),
-                label: '${l10n.pickupLabel} → ${l10n.returnLabel}',
-                value: trip.hasDates ? tripDatesLabel(context, trip) : null,
-                placeholder: l10n.periodMissing,
-                icon: Icons.calendar_today_outlined,
-                errorText: trip.hasDates && error != null
-                    ? l10n.periodError(error)
-                    : null,
-                onTap: () => context.push(Routes.dates),
+              Row(
+                children: [
+                  Expanded(
+                    child: RoveSelectField(
+                      key: const Key('home-pickup'),
+                      label: l10n.pickupLabel,
+                      value: trip.pickupAt == null
+                          ? null
+                          : compactDateTime(
+                              context,
+                              trip.pickupAt!,
+                              trip.timezone,
+                            ),
+                      placeholder: l10n.pickDate,
+                      icon: Icons.calendar_today_outlined,
+                      onTap: () => context.push(Routes.dates),
+                    ),
+                  ),
+                  const SizedBox(width: RoveSpacing.sm),
+                  Expanded(
+                    child: RoveSelectField(
+                      key: const Key('home-return'),
+                      label: l10n.returnLabel,
+                      value: trip.returnAt == null
+                          ? null
+                          : compactDateTime(
+                              context,
+                              trip.returnAt!,
+                              trip.timezone,
+                            ),
+                      placeholder: l10n.pickDate,
+                      icon: Icons.calendar_today_outlined,
+                      onTap: () => context.push(Routes.dates),
+                    ),
+                  ),
+                ],
               ),
+              if (trip.hasDates && error != null) ...[
+                const SizedBox(height: RoveSpacing.xs),
+                Text(
+                  l10n.periodError(error),
+                  key: const Key('home-period-error'),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: RoveColors.danger),
+                ),
+              ],
               const SizedBox(height: RoveSpacing.md),
               RoveButton(
                 key: const Key('home-search'),

@@ -294,6 +294,7 @@
       }
     }
   },
+  "extraKm": "Extra km",
   "mileageExcess": "{fee} per extra km",
   "@mileageExcess": {
     "placeholders": {
