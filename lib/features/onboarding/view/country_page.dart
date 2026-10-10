@@ -93,7 +93,7 @@ class _CountryPageState extends State<CountryPage> {
                               side: BorderSide(
                                 color: selected
                                     ? context.colors.primary
-                                    : context.colors.border,
+                                    : Colors.transparent,
                               ),
                             ),
                             clipBehavior: Clip.antiAlias,

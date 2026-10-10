@@ -329,58 +329,64 @@ class _TripStepState extends State<_TripStep> {
           child: ListView(
             padding: const EdgeInsets.all(RoveSpacing.md),
             children: [
-              _VehicleSummaryRow(vehicle: vehicle),
-              SectionHeader(title: l10n.tripTitle),
-              RoveSelectField(
-                key: const Key('checkout-dates'),
-                label: '${l10n.pickupLabel} → ${l10n.returnLabel}',
-                value: trip.hasDates ? tripDatesLabel(context, trip) : null,
-                placeholder: l10n.periodMissing,
-                icon: Icons.calendar_today_outlined,
-                errorText: periodError == null
-                    ? null
-                    : l10n.periodError(periodError),
-                onTap: () => context.push(Routes.dates),
-              ),
-              const SizedBox(height: RoveSpacing.lg),
-              Text(
-                l10n.pickupLocationLabel,
-                style: Theme.of(context).textTheme.labelMedium,
-              ),
-              const SizedBox(height: RoveSpacing.xs),
-              Text(vehicle.pickupLocation?.name ?? l10n.detailsPickupArranged),
-              if (vehicle.pickupLocation?.address != null)
-                MutedText(vehicle.pickupLocation!.address!, small: true),
-              if (vehicle.deliveryAvailable) ...[
-                const SizedBox(height: RoveSpacing.md),
-                SwitchListTile(
-                  key: const Key('checkout-delivery'),
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(l10n.deliverToMe),
-                  subtitle: Text(
-                    l10n.deliveryFeeNote(vehicle.deliveryFee.format()),
+              StepCard(
+                children: [
+                  _VehicleSummaryRow(vehicle: vehicle),
+                  SectionHeader(title: l10n.tripTitle),
+                  RoveSelectField(
+                    key: const Key('checkout-dates'),
+                    label: '${l10n.pickupLabel} → ${l10n.returnLabel}',
+                    value: trip.hasDates ? tripDatesLabel(context, trip) : null,
+                    placeholder: l10n.periodMissing,
+                    icon: Icons.calendar_today_outlined,
+                    errorText: periodError == null
+                        ? null
+                        : l10n.periodError(periodError),
+                    onTap: () => context.push(Routes.dates),
                   ),
-                  value: state.delivery,
-                  onChanged: (v) => context.read<CheckoutBloc>().add(
-                    CheckoutDeliveryChanged(enabled: v),
+                  const SizedBox(height: RoveSpacing.lg),
+                  Text(
+                    l10n.pickupLocationLabel,
+                    style: Theme.of(context).textTheme.labelMedium,
                   ),
-                ),
-                if (state.delivery)
-                  RoveTextField(
-                    fieldKey: const Key('checkout-address'),
-                    label: l10n.deliveryAddressLabel,
-                    hint: l10n.deliveryAddressHint,
-                    controller: _address,
-                    maxLines: 2,
-                    errorText:
-                        _showAddressError && _address.text.trim().length < 5
-                        ? l10n.fieldTooShort
-                        : null,
-                    onChanged: (v) => context.read<CheckoutBloc>().add(
-                      CheckoutDeliveryChanged(enabled: true, address: v),
+                  const SizedBox(height: RoveSpacing.xs),
+                  Text(
+                    vehicle.pickupLocation?.name ?? l10n.detailsPickupArranged,
+                  ),
+                  if (vehicle.pickupLocation?.address != null)
+                    MutedText(vehicle.pickupLocation!.address!, small: true),
+                  if (vehicle.deliveryAvailable) ...[
+                    const SizedBox(height: RoveSpacing.md),
+                    SwitchListTile(
+                      key: const Key('checkout-delivery'),
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(l10n.deliverToMe),
+                      subtitle: Text(
+                        l10n.deliveryFeeNote(vehicle.deliveryFee.format()),
+                      ),
+                      value: state.delivery,
+                      onChanged: (v) => context.read<CheckoutBloc>().add(
+                        CheckoutDeliveryChanged(enabled: v),
+                      ),
                     ),
-                  ),
-              ],
+                    if (state.delivery)
+                      RoveTextField(
+                        fieldKey: const Key('checkout-address'),
+                        label: l10n.deliveryAddressLabel,
+                        hint: l10n.deliveryAddressHint,
+                        controller: _address,
+                        maxLines: 2,
+                        errorText:
+                            _showAddressError && _address.text.trim().length < 5
+                            ? l10n.fieldTooShort
+                            : null,
+                        onChanged: (v) => context.read<CheckoutBloc>().add(
+                          CheckoutDeliveryChanged(enabled: true, address: v),
+                        ),
+                      ),
+                  ],
+                ],
+              ),
             ],
           ),
         ),
@@ -480,58 +486,62 @@ class _DriverStepState extends State<_DriverStep> {
             child: ListView(
               padding: const EdgeInsets.all(RoveSpacing.md),
               children: [
-                Text(
-                  l10n.driverTitle,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: RoveSpacing.xs),
-                MutedText(l10n.driverAgeNote),
-                const SizedBox(height: RoveSpacing.lg),
-                if (state.failure != null) ...[
-                  InlineNotice(
-                    message: l10n.failure(state.failure!),
-                    tone: NoticeTone.danger,
-                  ),
-                  const SizedBox(height: RoveSpacing.md),
-                ],
-                RoveTextField(
-                  fieldKey: const Key('driver-name'),
-                  label: l10n.fullNameLabel,
-                  controller: _name,
-                  textCapitalization: TextCapitalization.words,
-                  validator: (v) {
-                    final e = Validators.fullName(v);
-                    return e == null ? null : l10n.fieldError(e);
-                  },
-                ),
-                const SizedBox(height: RoveSpacing.md),
-                RoveTextField(
-                  fieldKey: const Key('driver-phone'),
-                  label: l10n.phoneLabel,
-                  controller: _phone,
-                  keyboardType: TextInputType.phone,
-                  validator: (v) {
-                    final e = Validators.phone(v);
-                    return e == null ? null : l10n.fieldError(e);
-                  },
-                ),
-                const SizedBox(height: RoveSpacing.md),
-                RoveSelectField(
-                  key: const Key('driver-dob'),
-                  label: l10n.dateOfBirthLabel,
-                  value: _dob == null
-                      ? null
-                      : ZonedTime.formatDate(
-                          DateTime.utc(_dob!.year, _dob!.month, _dob!.day),
-                          'UTC',
-                          locale: locale,
-                        ),
-                  placeholder: l10n.dateOfBirthHint,
-                  icon: Icons.cake_outlined,
-                  errorText: dobError == null
-                      ? null
-                      : l10n.fieldError(dobError),
-                  onTap: _pickDob,
+                StepCard(
+                  children: [
+                    Text(
+                      l10n.driverTitle,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: RoveSpacing.xs),
+                    MutedText(l10n.driverAgeNote),
+                    const SizedBox(height: RoveSpacing.lg),
+                    if (state.failure != null) ...[
+                      InlineNotice(
+                        message: l10n.failure(state.failure!),
+                        tone: NoticeTone.danger,
+                      ),
+                      const SizedBox(height: RoveSpacing.md),
+                    ],
+                    RoveTextField(
+                      fieldKey: const Key('driver-name'),
+                      label: l10n.fullNameLabel,
+                      controller: _name,
+                      textCapitalization: TextCapitalization.words,
+                      validator: (v) {
+                        final e = Validators.fullName(v);
+                        return e == null ? null : l10n.fieldError(e);
+                      },
+                    ),
+                    const SizedBox(height: RoveSpacing.md),
+                    RoveTextField(
+                      fieldKey: const Key('driver-phone'),
+                      label: l10n.phoneLabel,
+                      controller: _phone,
+                      keyboardType: TextInputType.phone,
+                      validator: (v) {
+                        final e = Validators.phone(v);
+                        return e == null ? null : l10n.fieldError(e);
+                      },
+                    ),
+                    const SizedBox(height: RoveSpacing.md),
+                    RoveSelectField(
+                      key: const Key('driver-dob'),
+                      label: l10n.dateOfBirthLabel,
+                      value: _dob == null
+                          ? null
+                          : ZonedTime.formatDate(
+                              DateTime.utc(_dob!.year, _dob!.month, _dob!.day),
+                              'UTC',
+                              locale: locale,
+                            ),
+                      placeholder: l10n.dateOfBirthHint,
+                      icon: Icons.cake_outlined,
+                      errorText: dobError == null
+                          ? null
+                          : l10n.fieldError(dobError),
+                      onTap: _pickDob,
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -567,21 +577,25 @@ class _VerificationStep extends StatelessWidget {
           child: ListView(
             padding: const EdgeInsets.all(RoveSpacing.md),
             children: [
-              Text(
-                l10n.verificationTitle,
-                style: Theme.of(context).textTheme.titleMedium,
+              StepCard(
+                children: [
+                  Text(
+                    l10n.verificationTitle,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: RoveSpacing.xs),
+                  MutedText(l10n.verificationBody),
+                  const SizedBox(height: RoveSpacing.md),
+                  if (state.failure != null) ...[
+                    InlineNotice(
+                      message: l10n.failure(state.failure!),
+                      tone: NoticeTone.danger,
+                    ),
+                    const SizedBox(height: RoveSpacing.md),
+                  ],
+                  const VerificationPanel(),
+                ],
               ),
-              const SizedBox(height: RoveSpacing.xs),
-              MutedText(l10n.verificationBody),
-              const SizedBox(height: RoveSpacing.md),
-              if (state.failure != null) ...[
-                InlineNotice(
-                  message: l10n.failure(state.failure!),
-                  tone: NoticeTone.danger,
-                ),
-                const SizedBox(height: RoveSpacing.md),
-              ],
-              const VerificationPanel(),
             ],
           ),
         ),
@@ -755,68 +769,97 @@ class _ReviewStepState extends State<_ReviewStep> {
           child: ListView(
             padding: const EdgeInsets.all(RoveSpacing.md),
             children: [
-              _VehicleSummaryRow(vehicle: widget.vehicle),
-              const SizedBox(height: RoveSpacing.md),
-              InfoRow(
-                label: l10n.bookingWhen,
-                value: tripDatesLabel(context, trip),
+              StepCard(
+                children: [
+                  _VehicleSummaryRow(vehicle: widget.vehicle),
+                  const SizedBox(height: RoveSpacing.md),
+                  InfoRow(
+                    label: l10n.bookingWhen,
+                    value: tripDatesLabel(context, trip),
+                  ),
+                  InfoRow(
+                    label: l10n.bookingWhere,
+                    value: state.delivery
+                        ? l10n.bookingDeliveryTo(state.deliveryAddress.trim())
+                        : (widget.vehicle.pickupLocation?.name ??
+                              l10n.detailsPickupArranged),
+                  ),
+                  if (state.driver != null)
+                    InfoRow(
+                      label: l10n.bookingDriver,
+                      value: state.driver!.fullName,
+                    ),
+                  SectionHeader(title: l10n.priceDetails),
+                  priceSection(),
+                  SectionHeader(title: l10n.detailsCancellation),
+                  MutedText(
+                    (quote?.cancellationPolicy ??
+                            widget.vehicle.cancellationPolicy)
+                        .summary,
+                  ),
+                  const SizedBox(height: RoveSpacing.xs),
+                  MutedText(
+                    widget.vehicle.bookingMode == BookingMode.request
+                        ? l10n.requestModeNote
+                        : l10n.instantModeNote,
+                    small: true,
+                  ),
+                  const SizedBox(height: RoveSpacing.md),
+                  if (creation == null)
+                    CheckboxListTile(
+                      key: const Key('checkout-terms'),
+                      contentPadding: EdgeInsets.zero,
+                      controlAffinity: ListTileControlAffinity.leading,
+                      value: state.termsAccepted,
+                      onChanged: (v) =>
+                          bloc.add(CheckoutTermsChanged(v ?? false)),
+                      title: Text(l10n.termsAccept, style: text.bodyMedium),
+                    ),
+                  Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: RoveButton.text(
+                      label: l10n.readTerms,
+                      onPressed: () => context.push(Routes.terms),
+                    ),
+                  ),
+                  if (state.failure != null) ...[
+                    const SizedBox(height: RoveSpacing.sm),
+                    InlineNotice(
+                      key: const Key('checkout-error'),
+                      message: l10n.failure(state.failure!),
+                      tone: NoticeTone.danger,
+                    ),
+                  ],
+                ],
               ),
-              InfoRow(
-                label: l10n.bookingWhere,
-                value: state.delivery
-                    ? l10n.bookingDeliveryTo(state.deliveryAddress.trim())
-                    : (widget.vehicle.pickupLocation?.name ??
-                          l10n.detailsPickupArranged),
-              ),
-              if (state.driver != null)
-                InfoRow(
-                  label: l10n.bookingDriver,
-                  value: state.driver!.fullName,
-                ),
-              SectionHeader(title: l10n.priceDetails),
-              priceSection(),
-              SectionHeader(title: l10n.detailsCancellation),
-              MutedText(
-                (quote?.cancellationPolicy ?? widget.vehicle.cancellationPolicy)
-                    .summary,
-              ),
-              const SizedBox(height: RoveSpacing.xs),
-              MutedText(
-                widget.vehicle.bookingMode == BookingMode.request
-                    ? l10n.requestModeNote
-                    : l10n.instantModeNote,
-                small: true,
-              ),
-              const SizedBox(height: RoveSpacing.md),
-              if (creation == null)
-                CheckboxListTile(
-                  key: const Key('checkout-terms'),
-                  contentPadding: EdgeInsets.zero,
-                  controlAffinity: ListTileControlAffinity.leading,
-                  value: state.termsAccepted,
-                  onChanged: (v) => bloc.add(CheckoutTermsChanged(v ?? false)),
-                  title: Text(l10n.termsAccept, style: text.bodyMedium),
-                ),
-              Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: RoveButton.text(
-                  label: l10n.readTerms,
-                  onPressed: () => context.push(Routes.terms),
-                ),
-              ),
-              if (state.failure != null) ...[
-                const SizedBox(height: RoveSpacing.sm),
-                InlineNotice(
-                  key: const Key('checkout-error'),
-                  message: l10n.failure(state.failure!),
-                  tone: NoticeTone.danger,
-                ),
-              ],
             ],
           ),
         ),
         BottomActionBar(child: primary),
       ],
+    );
+  }
+}
+
+/// A checkout step's content on a dark card (DESIGN v2).
+class StepCard extends StatelessWidget {
+  const StepCard({super.key, required this.children});
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: context.colors.surface,
+      borderRadius: RoveRadius.cardAll,
+      clipBehavior: Clip.antiAlias,
+      child: Padding(
+        padding: const EdgeInsets.all(RoveSpacing.md),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: children,
+        ),
+      ),
     );
   }
 }

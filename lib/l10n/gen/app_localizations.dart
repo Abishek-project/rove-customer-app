@@ -796,6 +796,12 @@ abstract class AppLocalizations {
   /// **'No featured cars in this city yet.'**
   String get featuredEmpty;
 
+  /// No description provided for @categoryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No cars of this type in this city yet.'**
+  String get categoryEmpty;
+
   /// No description provided for @categoryEconomy.
   ///
   /// In en, this message translates to:

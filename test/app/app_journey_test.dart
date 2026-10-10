@@ -113,6 +113,9 @@ void main() {
       find.byType(ListView).last,
       const Offset(0, -300),
     );
+    // Lift the checkbox clear of the sticky bottom bar.
+    await tester.drag(find.byType(ListView).last, const Offset(0, -400));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('checkout-terms')));
     await tester.pumpAndSettle();
     await tester.tap(book);

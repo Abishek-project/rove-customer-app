@@ -404,7 +404,7 @@ class _HorizontalCars extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 292,
+      height: 276,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: RoveSpacing.page,
@@ -432,7 +432,7 @@ class _Featured extends StatelessWidget {
           case LoadStatus.initial:
           case LoadStatus.loading:
             return SizedBox(
-              height: 292,
+              height: 276,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 padding: RoveSpacing.page,
@@ -463,7 +463,11 @@ class _Featured extends StatelessWidget {
           case LoadStatus.empty:
             return Padding(
               padding: RoveSpacing.page,
-              child: MutedText(context.l10n.featuredEmpty),
+              child: MutedText(
+                state.category == null
+                    ? context.l10n.featuredEmpty
+                    : context.l10n.categoryEmpty,
+              ),
             );
           case LoadStatus.success:
             return _HorizontalCars(vehicles: state.featured);

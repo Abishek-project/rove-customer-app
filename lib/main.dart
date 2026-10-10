@@ -9,6 +9,8 @@ import 'core/config/app_env.dart';
 import 'core/time/zoned_time.dart';
 import 'shared/data/api/supabase_auth_repository.dart';
 
+const _installedKey = 'app.installed';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   ZonedTime.ensureInitialized();
@@ -25,12 +27,19 @@ Future<void> main() async {
         '(see dart_defines/local.example.json).',
       );
     }
+    // The iOS keychain outlives the app: drop a session left over from a
+    // previous installation so a fresh install starts signed out.
+    final sessionStorage = SecureSessionStorage();
+    if (!(prefs.getBool(_installedKey) ?? false)) {
+      await sessionStorage.removePersistedSession();
+      await prefs.setBool(_installedKey, true);
+    }
     await Supabase.initialize(
       url: env.supabaseUrl,
       publishableKey: env.supabaseAnonKey,
       authOptions: FlutterAuthClientOptions(
         authFlowType: AuthFlowType.pkce,
-        localStorage: SecureSessionStorage(),
+        localStorage: sessionStorage,
       ),
     );
     deps = AppDependencies.live(env: env, prefs: prefs);

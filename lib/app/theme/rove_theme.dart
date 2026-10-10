@@ -231,10 +231,13 @@ abstract final class RoveTheme {
       listTileTheme: ListTileThemeData(
         contentPadding: const EdgeInsetsDirectional.symmetric(horizontal: 16),
         iconColor: c.textSecondary,
-        textColor: c.textPrimary,
         titleTextStyle: text.bodyLarge,
         subtitleTextStyle: text.bodyMedium?.copyWith(color: c.textSecondary),
         minVerticalPadding: 12,
+      ),
+      tabBarTheme: TabBarThemeData(
+        labelStyle: text.labelMedium,
+        unselectedLabelStyle: text.labelMedium,
       ),
       segmentedButtonTheme: SegmentedButtonThemeData(
         style: SegmentedButton.styleFrom(

@@ -119,25 +119,21 @@ class _PaymentSheet extends StatelessWidget {
                   small: true,
                 ),
                 SectionHeader(title: l10n.paymentMethodLabel),
-                RadioGroup<String>(
-                  groupValue: state.method,
-                  onChanged: (v) {
-                    if (!processing && v != null) {
-                      context.read<PaymentCubit>().selectMethod(v);
-                    }
-                  },
-                  child: Column(
-                    children: [
-                      for (final method in paymentMethods)
-                        RadioListTile<String>(
-                          key: ValueKey('method-$method'),
-                          contentPadding: EdgeInsets.zero,
-                          value: method,
-                          title: Text(l10n.paymentMethod(method)),
-                        ),
-                    ],
+                for (final method in paymentMethods)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: RoveSpacing.xs),
+                    child: _MethodTile(
+                      key: ValueKey('method-$method'),
+                      method: method,
+                      label: l10n.paymentMethod(method),
+                      selected: state.method == method,
+                      onTap: processing
+                          ? null
+                          : () => context.read<PaymentCubit>().selectMethod(
+                              method,
+                            ),
+                    ),
                   ),
-                ),
                 if (state.isMockProvider) ...[
                   const SizedBox(height: RoveSpacing.xs),
                   InlineNotice(
@@ -191,6 +187,78 @@ class _PaymentSheet extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+/// A wallet-style payment method row: icon circle, label, check.
+class _MethodTile extends StatelessWidget {
+  const _MethodTile({
+    super.key,
+    required this.method,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String method;
+  final String label;
+  final bool selected;
+  final VoidCallback? onTap;
+
+  static IconData iconFor(String method) => switch (method) {
+    'upi' => Icons.qr_code_2_rounded,
+    'apple_pay' => Icons.phone_iphone_rounded,
+    _ => Icons.credit_card_rounded,
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      excludeSemantics: true,
+      child: Material(
+        color: selected ? c.primaryTint : c.inputFill,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(RoveRadius.tile),
+          side: BorderSide(
+            color: selected ? c.primary : Colors.transparent,
+            width: 1.5,
+          ),
+        ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(RoveRadius.tile),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 20,
+                  backgroundColor: c.surface3,
+                  child: Icon(iconFor(method), size: 20, color: c.textPrimary),
+                ),
+                const SizedBox(width: RoveSpacing.sm),
+                Expanded(
+                  child: Text(
+                    label,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                ),
+                Icon(
+                  selected
+                      ? Icons.check_circle_rounded
+                      : Icons.radio_button_unchecked_rounded,
+                  color: selected ? c.primary : c.textTertiary,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

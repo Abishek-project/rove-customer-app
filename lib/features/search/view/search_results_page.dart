@@ -112,48 +112,37 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
           body: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  RoveSpacing.md,
-                  0,
-                  RoveSpacing.md,
-                  RoveSpacing.xs,
-                ),
+                padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
                 child: Row(
                   children: [
-                    Expanded(
-                      child: Text(
-                        state.status == LoadStatus.success
-                            ? l10n.searchResultsCount(state.meta.total)
-                            : '',
-                        style: text.bodyMedium?.copyWith(
-                          color: context.colors.textSecondary,
-                        ),
-                      ),
-                    ),
                     Flexible(
-                      child: TextButton.icon(
+                      child: _ControlPill(
                         key: const Key('search-sort'),
-                        onPressed: query == null
+                        icon: Icons.swap_vert_rounded,
+                        label: l10n.sort(query?.sort ?? VehicleSort.relevance),
+                        onTap: query == null
                             ? null
                             : () => _chooseSort(query.sort),
-                        icon: const Icon(Icons.swap_vert_rounded, size: 18),
-                        label: Text(
-                          l10n.sort(query?.sort ?? VehicleSort.relevance),
-                          overflow: TextOverflow.ellipsis,
-                        ),
                       ),
                     ),
-                    TextButton.icon(
+                    const SizedBox(width: RoveSpacing.xs),
+                    _ControlPill(
                       key: const Key('search-filters'),
-                      onPressed: query == null
+                      icon: Icons.tune_rounded,
+                      label: filterCount == 0
+                          ? l10n.filtersTitle
+                          : l10n.filtersWithCount(filterCount),
+                      active: filterCount > 0,
+                      onTap: query == null
                           ? null
                           : () => context.push(Routes.filters),
-                      icon: const Icon(Icons.tune_rounded, size: 18),
-                      label: Text(
-                        filterCount == 0
-                            ? l10n.filtersTitle
-                            : l10n.filtersWithCount(filterCount),
-                      ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      state.status == LoadStatus.success
+                          ? l10n.searchResultsCount(state.meta.total)
+                          : '',
+                      style: text.bodySmall,
                     ),
                   ],
                 ),
@@ -242,5 +231,54 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
           ),
         );
     }
+  }
+}
+
+/// A small `surface-2` pill (sort / filters); filled accent when active.
+class _ControlPill extends StatelessWidget {
+  const _ControlPill({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.onTap,
+    this.active = false,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback? onTap;
+  final bool active;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final fg = active ? c.onPrimary : c.textPrimary;
+    return Material(
+      color: active ? c.primary : c.inputFill,
+      shape: const StadiumBorder(),
+      child: InkWell(
+        customBorder: const StadiumBorder(),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 16, color: fg),
+              const SizedBox(width: 6),
+              Flexible(
+                child: Text(
+                  label,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.labelMedium?.copyWith(color: fg),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

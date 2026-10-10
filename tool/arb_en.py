@@ -140,6 +140,7 @@ s('trustPricingBody', 'Taxes and fees are included before you book. Deposits are
 s('trustPartnersTitle', 'Verified rental companies')
 s('trustPartnersBody', 'Every rental company is reviewed before it can list cars on Rove.')
 s('featuredEmpty', 'No featured cars in this city yet.')
+s('categoryEmpty', 'No cars of this type in this city yet.')
 
 # --- vehicle attributes
 s('categoryEconomy', 'Economy')

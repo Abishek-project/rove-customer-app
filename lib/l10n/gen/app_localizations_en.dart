@@ -392,6 +392,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get featuredEmpty => 'No featured cars in this city yet.';
 
   @override
+  String get categoryEmpty => 'No cars of this type in this city yet.';
+
+  @override
   String get categoryEconomy => 'Economy';
 
   @override

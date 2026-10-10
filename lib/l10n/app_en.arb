@@ -155,6 +155,7 @@
   "trustPartnersTitle": "Verified rental companies",
   "trustPartnersBody": "Every rental company is reviewed before it can list cars on Rove.",
   "featuredEmpty": "No featured cars in this city yet.",
+  "categoryEmpty": "No cars of this type in this city yet.",
   "categoryEconomy": "Economy",
   "categorySuv": "SUV",
   "categorySedan": "Sedan",

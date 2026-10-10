@@ -7,6 +7,7 @@ import '../../../app/theme/rove_tokens.dart';
 import '../../../core/localization/l10n.dart';
 import '../../../core/utils/load_status.dart';
 import '../../../core/widgets/grouped_list.dart';
+import '../../../core/widgets/icon_circle.dart';
 import '../../../core/widgets/skeleton.dart';
 import '../../../core/widgets/state_views.dart';
 import '../../../core/widgets/vehicle_card.dart';
@@ -25,7 +26,14 @@ class SavedPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            LargeTitle(l10n.savedTitle),
+            LargeTitle(
+              l10n.savedTitle,
+              trailing: IconCircle(
+                icon: Icons.search_rounded,
+                tooltip: l10n.searchPlaceholder,
+                onPressed: () => context.push(Routes.plan),
+              ),
+            ),
             Expanded(child: _list(context)),
           ],
         ),
