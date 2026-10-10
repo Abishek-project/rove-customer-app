@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 
 import '../../shared/models/reference.dart';
@@ -155,11 +157,14 @@ ApiFailure mapDioException(DioException e) {
         );
       }
       return failure;
+    case DioExceptionType.unknown:
+      // Only transport errors mean "offline"; anything else (e.g. a file
+      // that can't be read) is a generic failure.
+      return e.error is SocketException || e.error is HttpException
+          ? const ApiFailure.network()
+          : ApiFailure.unknown(e.error?.runtimeType.toString());
     case DioExceptionType.cancel:
     case DioExceptionType.badCertificate:
-    case DioExceptionType.unknown:
-      return e.error is Exception && e.response == null
-          ? const ApiFailure.network()
-          : const ApiFailure.unknown();
+      return const ApiFailure.unknown();
   }
 }

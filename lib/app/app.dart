@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -116,6 +118,8 @@ class _AppViewState extends State<_AppView> {
             final prefs = context.read<PreferencesCubit>();
             switch (state.status) {
               case AuthStatus.authenticated:
+                // Retry country config if the launch-time load failed.
+                unawaited(context.read<CountriesCubit>().load());
                 final profile = state.me?.profile;
                 if (profile?.countryCode != null &&
                     prefs.state.countryCode != profile!.countryCode) {
