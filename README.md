@@ -142,8 +142,10 @@ Codegen after model changes: `dart run build_runner build`. Strings: edit `tool/
 
 ## Screenshots
 
-`docs/screenshots/` holds screenshots from the iOS simulator against the live local backend
-(`live-ae-*`, `live-in-*`) and the v2 restyle (`v2-*`).
+`docs/screenshots/` holds iOS-simulator screenshots: `v2-*` is the current design (DESIGN v2, against
+the live backend unless the name says mock), and `live-*` are from the first live integration run
+(earlier, lighter design) covering declines, cancellation preview, validation, licence upload and
+session expiry.
 
 ## Credits
 
