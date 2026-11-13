@@ -1,6 +1,6 @@
 # Rove — customer app (Flutter)
 
-> Part of **Rove**: [backend (NestJS)](https://github.com/Abishek-project/rove-backend) · [partner dashboard (React)](https://github.com/Abishek-project/rove-partner-dashboard) · [customer app (Flutter)](https://github.com/Abishek-project/rove-customer-app)
+> Part of **Rove**: [backend (NestJS)](https://github.com/Abishek-project/rove-backend) · [partner dashboard (React)](https://github.com/Abishek-project/rove-partner-dashboard) · [customer app (Flutter)](https://github.com/Abishek-project/rove-customer-app) · [project overview](docs/OVERVIEW.md)
 
 Customer mobile app for **Rove**, a car rental marketplace for India (INR) and the UAE (AED).
 Customers browse cars from verified rental companies, see the backend-calculated price, book,
